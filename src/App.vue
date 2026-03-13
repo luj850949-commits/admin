@@ -4,7 +4,7 @@
 
 <template>
   <div>
-    <h1>你好</h1>
+    <el-button type="primary">按钮</el-button>
   </div>
 </template>
 
