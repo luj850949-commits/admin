@@ -1,0 +1,7 @@
+@layer base{
+  *{
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* 如果是单纯的登录页，可以直接把超出屏幕的部分藏起来 */
+  }
+}

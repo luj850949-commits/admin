@@ -8,6 +8,8 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+// 导入tailwindcss
+import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -22,6 +24,8 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()],
     }),
+    // 导入tailwindcss()
+    tailwindcss(),
   ],
   resolve: {
     alias: {

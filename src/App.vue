@@ -1,13 +1,17 @@
 <script setup lang="ts">
-
+import Login from '@/views/login/index.vue'
 </script>
 
 <template>
   <div>
-    <el-button type="primary">按钮</el-button>
+    <Login></Login>
   </div>
 </template>
 
 <style>
-
+.box{
+  width: 100px;
+  height: 100px;
+  background-color: aqua;
+}
 </style>
