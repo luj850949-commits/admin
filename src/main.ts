@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+
 import '@/style/main.css'
 import '@/style/tailwindcss.css'
 // 暗黑模式
