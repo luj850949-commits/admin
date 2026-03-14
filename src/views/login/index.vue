@@ -2,19 +2,17 @@
 import { ref, reactive } from "vue";
 import type { FormInstance } from "element-plus";
 import { bg, illustration, avatar } from "./utils/static"
+import { useDark } from '@vueuse/core'
 
-// 1. 定义页面的状态
 const loading = ref(false);
 const ruleFormRef = ref<FormInstance>();
 
-// 2. 用户名密码
 const ruleForm = reactive({
   username: "admin",
   password: "admin123",
   verifyCode: ""
 });
 
-// 3. 登录函数（简化版）
 const onLogin = async () => {
   if (!ruleFormRef.value) return;
   
@@ -27,12 +25,29 @@ const onLogin = async () => {
     alert("点击了登录！数据请看控制台");
   }, 1000);
 };
+
+// 切换暗黑主题
+const isDark = useDark({
+  disableTransition: false // 关闭自带的“禁用过渡动画”功能
+})
 </script>
 
 <template>
   <div>
     <!-- 背景图 -->
     <img :src="bg" class="wave">
+
+    <!-- 右上角控制暗黑主题和翻译的按钮 -->
+    <div class="flex-c absolute right-5 top-3">
+      <!-- 主题 -->
+      <el-switch
+        inline-prompt
+        active-text="☀️"
+        inactive-text="🌙"
+        v-model="isDark"
+        style="--el-switch-on-color: #409eff; --el-switch-off-color: #f2f2f2"
+      />
+    </div>
 
     <div class="login-container">
       <!-- 左侧插画 -->
@@ -41,7 +56,7 @@ const onLogin = async () => {
       </div>
 
       <!-- 右侧登录窗口 -->
-      <div class="login-box">
+      <div class="login-box bg-white dark:bg-gray-700 dark:border-gray-700 transition-colors duration-300">
         <div class="login-form">
           <!-- 登录窗口上方logo -->
           <div class="flex justify-center mb-6">
@@ -51,7 +66,7 @@ const onLogin = async () => {
             />
           </div>
           
-          <h2 class="text-center text-2xl font-bold text-gray-800 mb-6">用户登录</h2>
+          <h2 class="text-center text-2xl font-bold text-gray-800 dark:text-white mb-6 transition-colors duration-300">用户登录</h2>
           
           <el-form ref="ruleFormRef" :model="ruleForm" size="large">
             
@@ -125,7 +140,6 @@ const onLogin = async () => {
 .login-box {
   width: 400px;
   padding: 40px;
-  background: white;
   border-radius: 8px;
   box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
 }
