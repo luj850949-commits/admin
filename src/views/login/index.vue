@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
-import type { FormInstance } from "element-plus";
+import type { FormInstance, FormRules, FormItemRule } from "element-plus";
+import { ElMessage } from "element-plus"
 import { bg, illustration, avatar } from "./utils/static"
 import { useDark, useStorage } from '@vueuse/core'
 import { Setting } from '@element-plus/icons-vue'
@@ -21,14 +22,32 @@ const ruleForm = reactive({
 const onLogin = async () => {
   if (!ruleFormRef.value) return;
   
-  // 模拟点击登录后的过程
-  loading.value = true;
-  console.log("正在提交数据：", ruleForm);
-  
-  setTimeout(() => {
-    loading.value = false;
-    alert("点击了登录！数据请看控制台");
-  }, 1000);
+  // 调用 validate 方法进行全局校验
+  await ruleFormRef.value.validate((valid, fields) => {
+    if (valid) {
+      // 校验全部通过！接下来走验证码比对逻辑
+      if (ruleForm.verifyCode.toLowerCase() !== generatedCode.value.toLowerCase()) {
+        ElMessage.error("验证码输入错误，请重新输入");
+        ruleForm.verifyCode = "";
+        drawVerifyCode();
+        return;
+      }
+
+      // 开始真正的登录请求动画
+      loading.value = true;
+      console.log("前端校验全部通过！准备提交数据：", ruleForm);
+      
+      setTimeout(() => {
+        loading.value = false;
+        ElMessage.success("登录成功！");
+      }, 1000);
+
+    } else {
+      // 校验未通过，Element Plus 会自动在输入框下方显示红字提示
+      console.log("表单校验未通过", fields);
+      // return false;
+    }
+  });
 };
 
 // 切换暗黑主题
@@ -121,6 +140,44 @@ const drawVerifyCode = () => {
 onMounted(() => {
   drawVerifyCode();
 });
+
+// 表单验证
+// 1. 编写密码的自定义校验逻辑
+const validatePassword = (rule: FormItemRule, value: string, callback: (error?: Error) => void) => {
+  if (!value) { 
+    return callback(new Error("密码不能为空"));
+  }
+  if (value.length < 8 || value.length > 18) {
+    return callback(new Error("密码长度必须在 8-18 位之间"));
+  }
+  
+  // 统计包含的字符类型数量
+  let typeCount = 0;
+  if (/[a-zA-Z]/.test(value)) typeCount++; // 包含字母
+  if (/[0-9]/.test(value)) typeCount++;    // 包含数字
+  if (/[^a-zA-Z0-9\s]/.test(value)) typeCount++; // 包含符号（排除空格、字母、数字）
+
+  if (typeCount < 2) {
+    return callback(new Error("密码必须包含数字、字母、符号中的任意两种"));
+  }
+  
+  // 校验通过
+  callback();
+};
+
+// 2. 定义完整的表单校验规则对象
+const loginRules = reactive<FormRules>({
+  username: [
+    { required: true, message: "用户名不能为空", trigger: "blur" }
+  ],
+  password: [
+    // 使用自定义校验函数，并设置 trigger 为 blur（失焦时触发）
+    { required: true, validator: validatePassword, trigger: ["blur"] }
+  ],
+  verifyCode: [
+    { required: true, message: "验证码不能为空", trigger: "blur" }
+  ]
+});
 </script>
 
 <template>
@@ -180,7 +237,7 @@ onMounted(() => {
           
           <h2 class="text-center text-2xl font-bold text-gray-800 dark:text-white mb-6 transition-colors duration-300">{{ $t('login.title') }}</h2>
           
-          <el-form ref="ruleFormRef" :model="ruleForm" size="large">
+          <el-form :rules="loginRules" ref="ruleFormRef" :model="ruleForm" size="large">
             
             <el-form-item prop="username">
               <el-input
