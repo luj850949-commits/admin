@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import type { FormInstance } from "element-plus";
 import { bg, illustration, avatar } from "./utils/static"
 import { useDark, useStorage } from '@vueuse/core'
@@ -42,6 +42,85 @@ const handleLangChange = (command: string) => {
   currentLang.value = command;
   locale.value = command;
 }
+
+// 验证码
+// 1. 验证码相关的响应式变量
+const verifyCanvasRef = ref<HTMLCanvasElement | null>(null);
+const generatedCode = ref(""); // 存放真实生成的4位验证码，用于比对
+
+// 2. 核心：绘制图形验证码的函数
+const drawVerifyCode = () => {
+  const canvas = verifyCanvasRef.value;
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  const width = canvas.width;
+  const height = canvas.height;
+
+  // 随机颜色生成函数
+  const randomColor = (min: number, max: number) => {
+    const r = Math.floor(Math.random() * (max - min) + min);
+    const g = Math.floor(Math.random() * (max - min) + min);
+    const b = Math.floor(Math.random() * (max - min) + min);
+    return `rgb(${r},${g},${b})`;
+  };
+
+  // 随机数生成函数
+  const randomNum = (min: number, max: number) => Math.floor(Math.random() * (max - min) + min);
+
+  // 清空画布并填充浅色背景
+  ctx.fillStyle = randomColor(180, 240);
+  ctx.fillRect(0, 0, width, height);
+
+  // 准备要抽取的字符（去掉了容易混淆的 1, l, I, 0, O）
+  const str = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
+  let code = "";
+
+  // 绘制 4 个字符
+  for (let i = 0; i < 4; i++) {
+    const char = str.charAt(randomNum(0, str.length));
+    code += char;
+    
+    const fontSize = randomNum(18, 28); // 字体大小随机
+    const deg = randomNum(-30, 30);     // 旋转角度随机
+    ctx.font = `bold ${fontSize}px Arial`;
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = randomColor(50, 160); // 字体颜色随机深色
+
+    ctx.save();
+    // 移动原点到指定位置并旋转，制造歪歪扭扭的效果
+    ctx.translate(20 * i + 15, height / 2);
+    ctx.rotate((deg * Math.PI) / 180);
+    ctx.fillText(char, -10, 0);
+    ctx.restore();
+  }
+  
+  // 保存生成的验证码内容
+  generatedCode.value = code;
+
+  // 绘制干扰线（5条）
+  for (let i = 0; i < 5; i++) {
+    ctx.beginPath();
+    ctx.moveTo(randomNum(0, width), randomNum(0, height));
+    ctx.lineTo(randomNum(0, width), randomNum(0, height));
+    ctx.strokeStyle = randomColor(100, 200);
+    ctx.stroke();
+  }
+
+  // 绘制干扰噪点（40个）
+  for (let i = 0; i < 40; i++) {
+    ctx.beginPath();
+    ctx.arc(randomNum(0, width), randomNum(0, height), 1, 0, 2 * Math.PI);
+    ctx.fillStyle = randomColor(150, 200);
+    ctx.fill();
+  }
+};
+
+// 3. 页面挂载时，自动画一张验证码出来
+onMounted(() => {
+  drawVerifyCode();
+});
 </script>
 
 <template>
@@ -126,9 +205,16 @@ const handleLangChange = (command: string) => {
                 :placeholder="$t('login.verifyCode')"
                 clearable
               >
-                <template #append>
-                  <div style="cursor: pointer;">验证码占位</div>
-                </template>
+              <template #append>
+                <canvas
+                  ref="verifyCanvasRef"
+                  width="110"
+                  height="38"
+                  class="cursor-pointer"
+                  :title="$t('login.reVerifyCode')"
+                  @click="drawVerifyCode"
+                ></canvas>
+              </template>
               </el-input>
             </el-form-item>
 
@@ -181,5 +267,9 @@ const handleLangChange = (command: string) => {
   .img {
     display: none;
   }
+}
+/* 强行清除输入框 append 插槽的默认内边距 */
+:deep(.el-input-group__append) {
+  padding: 0;
 }
 </style>
