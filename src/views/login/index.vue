@@ -4,6 +4,10 @@ import type { FormInstance } from "element-plus";
 import { bg, illustration, avatar } from "./utils/static"
 import { useDark, useStorage } from '@vueuse/core'
 import { Setting } from '@element-plus/icons-vue'
+import { useI18n } from 'vue-i18n'
+
+// 引入 vue-i18n 提供的方法：locale 用于切换语言
+const { locale } = useI18n()
 
 const loading = ref(false);
 const ruleFormRef = ref<FormInstance>();
@@ -36,6 +40,7 @@ const isDark = useDark({
 const currentLang = useStorage('locale', 'zhCn');
 const handleLangChange = (command: string) => {
   currentLang.value = command;
+  locale.value = command;
 }
 </script>
 
@@ -94,14 +99,14 @@ const handleLangChange = (command: string) => {
             />
           </div>
           
-          <h2 class="text-center text-2xl font-bold text-gray-800 dark:text-white mb-6 transition-colors duration-300">用户登录</h2>
+          <h2 class="text-center text-2xl font-bold text-gray-800 dark:text-white mb-6 transition-colors duration-300">{{ $t('login.title') }}</h2>
           
           <el-form ref="ruleFormRef" :model="ruleForm" size="large">
             
             <el-form-item prop="username">
               <el-input
                 v-model="ruleForm.username"
-                placeholder="用户名"
+                :placeholder="$t('login.username')"
                 clearable
               />
             </el-form-item>
@@ -109,7 +114,7 @@ const handleLangChange = (command: string) => {
             <el-form-item prop="password">
               <el-input
                 v-model="ruleForm.password"
-                placeholder="密码"
+                :placeholder="$t('login.password')"
                 show-password
                 clearable
               />
@@ -118,7 +123,7 @@ const handleLangChange = (command: string) => {
             <el-form-item prop="verifyCode">
               <el-input
                 v-model="ruleForm.verifyCode"
-                placeholder="验证码"
+                :placeholder="$t('login.verifyCode')"
                 clearable
               >
                 <template #append>
@@ -134,7 +139,7 @@ const handleLangChange = (command: string) => {
                 :loading="loading"
                 @click="onLogin"
               >
-                登录
+                {{ $t('login.submit') }}
               </el-button>
             </el-form-item>
           </el-form>

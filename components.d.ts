@@ -13,6 +13,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
@@ -20,7 +21,9 @@ declare module 'vue' {
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElPagination: typeof import('element-plus/es')['ElPagination']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
+    ElTable: typeof import('element-plus/es')['ElTable']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
@@ -29,6 +32,7 @@ declare module 'vue' {
 // For TSX support
 declare global {
   const ElButton: typeof import('element-plus/es')['ElButton']
+  const ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
   const ElDropdown: typeof import('element-plus/es')['ElDropdown']
   const ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
   const ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
@@ -36,7 +40,9 @@ declare global {
   const ElFormItem: typeof import('element-plus/es')['ElFormItem']
   const ElIcon: typeof import('element-plus/es')['ElIcon']
   const ElInput: typeof import('element-plus/es')['ElInput']
+  const ElPagination: typeof import('element-plus/es')['ElPagination']
   const ElSwitch: typeof import('element-plus/es')['ElSwitch']
+  const ElTable: typeof import('element-plus/es')['ElTable']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
 }
