@@ -1,18 +1,21 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, onUpdated } from "vue";
 import type { FormInstance, FormRules, FormItemRule } from "element-plus";
 import { ElMessage } from "element-plus"
 import { bg, illustration, avatar } from "./utils/static"
 import { useDark, useStorage } from '@vueuse/core'
-import { Setting } from '@element-plus/icons-vue'
+import { Setting, User ,Lock, Compass, Iphone } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 
 // 引入 vue-i18n 提供的方法：locale 用于切换语言
-const { locale } = useI18n()
+const { t, locale } = useI18n()
 
 const loading = ref(false);
 const ruleFormRef = ref<FormInstance>();
+// 记录当前处于哪个模块 ('login' | 'register' | 'forgot')
+const currentModule = ref("login");
 
+// 登录
 const ruleForm = reactive({
   username: "admin",
   password: "admin123",
@@ -45,7 +48,6 @@ const onLogin = async () => {
     } else {
       // 校验未通过，Element Plus 会自动在输入框下方显示红字提示
       console.log("表单校验未通过", fields);
-      // return false;
     }
   });
 };
@@ -66,17 +68,14 @@ const handleLangChange = (command: string) => {
 // 1. 验证码相关的响应式变量
 const verifyCanvasRef = ref<HTMLCanvasElement | null>(null);
 const generatedCode = ref(""); // 存放真实生成的4位验证码，用于比对
-
 // 2. 核心：绘制图形验证码的函数
 const drawVerifyCode = () => {
   const canvas = verifyCanvasRef.value;
   if (!canvas) return;
   const ctx = canvas.getContext("2d");
   if (!ctx) return;
-
   const width = canvas.width;
   const height = canvas.height;
-
   // 随机颜色生成函数
   const randomColor = (min: number, max: number) => {
     const r = Math.floor(Math.random() * (max - min) + min);
@@ -84,29 +83,23 @@ const drawVerifyCode = () => {
     const b = Math.floor(Math.random() * (max - min) + min);
     return `rgb(${r},${g},${b})`;
   };
-
   // 随机数生成函数
   const randomNum = (min: number, max: number) => Math.floor(Math.random() * (max - min) + min);
-
   // 清空画布并填充浅色背景
   ctx.fillStyle = randomColor(180, 240);
   ctx.fillRect(0, 0, width, height);
-
   // 准备要抽取的字符（去掉了容易混淆的 1, l, I, 0, O）
   const str = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789";
   let code = "";
-
   // 绘制 4 个字符
   for (let i = 0; i < 4; i++) {
     const char = str.charAt(randomNum(0, str.length));
     code += char;
-    
     const fontSize = randomNum(18, 28); // 字体大小随机
     const deg = randomNum(-30, 30);     // 旋转角度随机
     ctx.font = `bold ${fontSize}px Arial`;
     ctx.textBaseline = "middle";
     ctx.fillStyle = randomColor(50, 160); // 字体颜色随机深色
-
     ctx.save();
     // 移动原点到指定位置并旋转，制造歪歪扭扭的效果
     ctx.translate(20 * i + 15, height / 2);
@@ -114,10 +107,8 @@ const drawVerifyCode = () => {
     ctx.fillText(char, -10, 0);
     ctx.restore();
   }
-  
   // 保存生成的验证码内容
   generatedCode.value = code;
-
   // 绘制干扰线（5条）
   for (let i = 0; i < 5; i++) {
     ctx.beginPath();
@@ -126,7 +117,6 @@ const drawVerifyCode = () => {
     ctx.strokeStyle = randomColor(100, 200);
     ctx.stroke();
   }
-
   // 绘制干扰噪点（40个）
   for (let i = 0; i < 40; i++) {
     ctx.beginPath();
@@ -135,20 +125,22 @@ const drawVerifyCode = () => {
     ctx.fill();
   }
 };
-
-// 3. 页面挂载时，自动画一张验证码出来
+// 3. 页面挂载或刷新时，自动画一张验证码出来
 onMounted(() => {
   drawVerifyCode();
 });
+onUpdated(() => {
+  drawVerifyCode();
+})
 
 // 表单验证
 // 1. 编写密码的自定义校验逻辑
 const validatePassword = (rule: FormItemRule, value: string, callback: (error?: Error) => void) => {
   if (!value) { 
-    return callback(new Error("密码不能为空"));
+    return callback(new Error(t('login.passwordEmpty')));
   }
   if (value.length < 8 || value.length > 18) {
-    return callback(new Error("密码长度必须在 8-18 位之间"));
+    return callback(new Error(t('login.passwordLength')));
   }
   
   // 统计包含的字符类型数量
@@ -158,7 +150,7 @@ const validatePassword = (rule: FormItemRule, value: string, callback: (error?: 
   if (/[^a-zA-Z0-9\s]/.test(value)) typeCount++; // 包含符号（排除空格、字母、数字）
 
   if (typeCount < 2) {
-    return callback(new Error("密码必须包含数字、字母、符号中的任意两种"));
+    return callback(new Error(t('login.passwordType')));
   }
   
   // 校验通过
@@ -168,14 +160,110 @@ const validatePassword = (rule: FormItemRule, value: string, callback: (error?: 
 // 2. 定义完整的表单校验规则对象
 const loginRules = reactive<FormRules>({
   username: [
-    { required: true, message: "用户名不能为空", trigger: "blur" }
+    { required: true, message: t('login.usernameEmpty'), trigger: "blur" }
   ],
   password: [
     // 使用自定义校验函数，并设置 trigger 为 blur（失焦时触发）
     { required: true, validator: validatePassword, trigger: ["blur"] }
   ],
   verifyCode: [
-    { required: true, message: "验证码不能为空", trigger: "blur" }
+    { required: true, message: t('login.verifyEmpty'), trigger: "blur" }
+  ]
+});
+
+
+// 注册
+const registerFormRef = ref<FormInstance>();
+const registerForm = reactive({
+  username: "",
+  phone: "",
+  verifyCode: "",
+  password: "",
+  confirmPassword: "",
+});
+const countdown = ref(0); // 倒计时秒数
+const isCounting = ref(false); // 是否正在倒计时中
+let timer: ReturnType<typeof setInterval> | null = null; // 定时器引用
+// 点击获取验证码
+const onGetVerCode = async() => {
+  if (!registerFormRef.value) return;
+  await registerFormRef.value.validateField("phone");
+  ElMessage.success(t('login.verCodeSend'));
+  startCountdown();
+}
+// 启动倒计时函数
+const startCountdown = () => {
+  isCounting.value = true;
+  countdown.value = 60; // 设置倒计时 60 秒
+  
+  timer = setInterval(() => {
+    if (countdown.value > 0) {
+      countdown.value--;
+    } else {
+      // 倒计时结束，清理定时器并恢复按钮状态
+      clearInterval(timer!);
+      isCounting.value = false;
+    }
+  }, 1000);
+};
+// 自定义验证再次输入密码
+const rePassword = (rule: FormItemRule, value: string, callback: (error?: Error) => void) => {
+  if(value !== registerForm.password){
+    return callback(new Error(t('login.rePassword')));
+  }else{
+    // 校验通过
+    callback();
+  }
+};
+const registerRules = reactive<FormRules>({
+  username: [
+    { required: true, message: t('login.usernameEmpty'), trigger: "blur" }
+  ],
+  phone: [
+    { required: true, message: t('login.phoneEmpty'), trigger: ["blur"] },
+    { pattern: /^1[3-9]\d{9}$/, message: t('login.phoneType'), trigger: ["blur"] }
+  ],
+  password: [
+    { required: true, validator: validatePassword, trigger: ["blur"] }
+  ],
+  verifyCode: [
+    { required: true, message: t('login.verifyEmpty'), trigger: "blur" }
+  ],
+  confirmPassword: [
+    { required: true, validator: validatePassword, trigger: ["blur"] },
+    { validator: rePassword, trigger: ["blur"] }
+  ]
+});
+
+// 忘记密码
+const forgotFormRef = ref<FormInstance>();
+const forgotForm = reactive({
+  phone: "",
+  verifyCode: "",
+  password: "",
+  confirmPassword: '',
+});
+// 点击获取验证码
+const onForGetVerCode = async() => {
+  if (!forgotFormRef.value) return;
+  await forgotFormRef.value.validateField("phone");
+  ElMessage.success(t('login.verCodeSend'));
+  startCountdown();
+}
+const forgotRules = reactive<FormRules>({
+  phone: [
+    { required: true, message: t('login.phoneEmpty'), trigger: ["blur"] },
+    { pattern: /^1[3-9]\d{9}$/, message: t('login.phoneType'), trigger: ["blur"] }
+  ],
+  password: [
+    { required: true, validator: validatePassword, trigger: ["blur"] }
+  ],
+  verifyCode: [
+    { required: true, message: t('login.verifyEmpty'), trigger: "blur" }
+  ],
+  confirmPassword: [
+    { required: true, validator: validatePassword, trigger: ["blur"] },
+    { validator: rePassword, trigger: ["blur"] }
   ]
 });
 </script>
@@ -226,6 +314,7 @@ const loginRules = reactive<FormRules>({
 
       <!-- 右侧登录窗口 -->
       <div class="login-box bg-white dark:bg-gray-700 dark:border-gray-700 transition-colors duration-300">
+        
         <div class="login-form">
           <!-- 登录窗口上方logo -->
           <div class="flex justify-center mb-6">
@@ -234,58 +323,234 @@ const loginRules = reactive<FormRules>({
               class="w-[100px] h-[100px]" 
             />
           </div>
+          <!-- 登录窗口 -->
+          <div v-if="currentModule === 'login'">
+            <h2 class="text-center text-2xl font-bold text-gray-800 dark:text-white mb-6 transition-colors duration-300">{{ $t('login.title') }}</h2>
+            <el-form :rules="loginRules" ref="ruleFormRef" :model="ruleForm" size="large">
+              
+              <el-form-item prop="username">
+                <el-input
+                  v-model="ruleForm.username"
+                  :placeholder="$t('login.username')"
+                  clearable
+                >
+                <template #prefix>
+                  <el-icon><User /></el-icon>
+                </template>
+                </el-input>
+              </el-form-item>
+
+              <el-form-item prop="password">
+                <el-input
+                  v-model="ruleForm.password"
+                  :placeholder="$t('login.password')"
+                  show-password
+                  clearable
+                >
+                <template #prefix>
+                  <el-icon><Lock /></el-icon>
+                </template>
+                </el-input>
+              </el-form-item>
+
+              <el-form-item prop="verifyCode">
+                <el-input
+                  v-model="ruleForm.verifyCode"
+                  :placeholder="$t('login.verifyCode')"
+                  clearable
+                >
+                <template #append>
+                  <canvas
+                    ref="verifyCanvasRef"
+                    width="110"
+                    height="38"
+                    class="cursor-pointer"
+                    :title="$t('login.reVerifyCode')"
+                    @click="drawVerifyCode"
+                  ></canvas>
+                </template>
+                <template #prefix>
+                  <el-icon><Compass /></el-icon>
+                </template>
+                </el-input>
+              </el-form-item>
+
+              <el-form-item>
+                <el-button
+                  class="w-full"
+                  type="primary"
+                  :loading="loading"
+                  @click="onLogin"
+                >
+                  {{ $t('login.submit') }}
+                </el-button>
+              </el-form-item>
+            </el-form>
+            <div class="flex justify-between mt-4 text-sm text-gray-500 dark:text-gray-400">
+              <span class="cursor-pointer hover:text-[#409eff] transition-colors" @click="currentModule = 'forgot'">
+                {{ $t('login.forget') }}
+              </span>
+              <span class="cursor-pointer hover:text-[#409eff] transition-colors" @click="currentModule = 'register'">
+                {{ $t('login.reregister') }}
+              </span>
+            </div>
+          </div>
           
-          <h2 class="text-center text-2xl font-bold text-gray-800 dark:text-white mb-6 transition-colors duration-300">{{ $t('login.title') }}</h2>
+          <!-- 注册窗口 -->
+          <div v-else-if="currentModule === 'register'">
+            <h2 class="text-center text-2xl font-bold text-gray-800 dark:text-white mb-6">
+              {{ $t('login.reregisterTitle') }}
+            </h2>
+
+            <el-form :rules="registerRules" :model="registerForm" ref="registerFormRef" size="large">
+              <el-form-item prop="username">
+                <el-input
+                  v-model="registerForm.username"
+                  :placeholder="$t('login.username')"
+                  clearable
+                >
+                <template #prefix>
+                  <el-icon><User /></el-icon>
+                </template>
+                </el-input>
+              </el-form-item>
           
-          <el-form :rules="loginRules" ref="ruleFormRef" :model="ruleForm" size="large">
-            
-            <el-form-item prop="username">
-              <el-input
-                v-model="ruleForm.username"
-                :placeholder="$t('login.username')"
-                clearable
-              />
-            </el-form-item>
+              <el-form-item prop="phone">
+                <el-input
+                  v-model="registerForm.phone"
+                  :placeholder="$t('login.phoneNum')"
+                  clearable
+                >
+                <template #prefix>
+                  <el-icon><Iphone /></el-icon>
+                </template>
+                </el-input>
+              </el-form-item>
 
-            <el-form-item prop="password">
-              <el-input
-                v-model="ruleForm.password"
-                :placeholder="$t('login.password')"
-                show-password
-                clearable
-              />
-            </el-form-item>
+              <el-form-item prop="verifyCode">
+                <el-input
+                  v-model="registerForm.verifyCode"
+                  :placeholder="$t('login.verifyCode')"
+                  clearable
+                >
+                <template #append>
+                  <el-button :disabled="isCounting" class="w-40 hover:!text-[#409eff]" @click="onGetVerCode">{{ isCounting ? `${countdown}` + $t('login.seconds') : $t('login.getVerCode') }}</el-button>
+                </template>
+                <template #prefix>
+                  <el-icon><Compass /></el-icon>
+                </template>
+                </el-input>
+              </el-form-item>
 
-            <el-form-item prop="verifyCode">
-              <el-input
-                v-model="ruleForm.verifyCode"
-                :placeholder="$t('login.verifyCode')"
-                clearable
-              >
-              <template #append>
-                <canvas
-                  ref="verifyCanvasRef"
-                  width="110"
-                  height="38"
-                  class="cursor-pointer"
-                  :title="$t('login.reVerifyCode')"
-                  @click="drawVerifyCode"
-                ></canvas>
-              </template>
-              </el-input>
-            </el-form-item>
+              <el-form-item prop="password">
+                <el-input
+                  v-model="registerForm.password"
+                  :placeholder="$t('login.password')"
+                  show-password
+                  clearable
+                >
+                <template #prefix>
+                  <el-icon><Lock /></el-icon>
+                </template>
+                </el-input>
+              </el-form-item>
 
-            <el-form-item>
-              <el-button
-                class="w-full"
-                type="primary"
-                :loading="loading"
-                @click="onLogin"
-              >
-                {{ $t('login.submit') }}
+              <el-form-item prop="confirmPassword">
+                <el-input
+                  v-model="registerForm.confirmPassword"
+                  :placeholder="$t('login.surePassword')"
+                  show-password
+                  clearable
+                >
+                <template #prefix>
+                  <el-icon><Lock /></el-icon>
+                </template>
+                </el-input>
+              </el-form-item>
+
+              <el-button class="w-full" type="success" @click="currentModule = 'login'">
+                {{ $t('login.reregisterSuccess') }}
               </el-button>
-            </el-form-item>
-          </el-form>
+            </el-form>
+
+            <div class="flex justify-center mt-4 text-sm text-gray-500 dark:text-gray-400">
+              <span class="cursor-pointer hover:text-[#409eff] transition-colors" @click="currentModule = 'login'">
+                ⬅ {{ $t('login.backLogin') }}
+              </span>
+            </div>
+          </div>
+
+          <!-- 忘记密码 -->
+          <div v-else-if="currentModule === 'forgot'">
+            <h2 class="text-center text-2xl font-bold text-gray-800 dark:text-white mb-6">
+              {{ $t('login.reTitle') }}
+            </h2>
+            
+            <el-form :rules="forgotRules" :model="forgotForm" ref="forgotFormRef" size="large">
+              <el-form-item prop="phone">
+                <el-input
+                  v-model="forgotForm.phone"
+                  :placeholder="$t('login.phoneNum')"
+                  clearable
+                >
+                <template #prefix>
+                  <el-icon><Iphone /></el-icon>
+                </template>
+                </el-input>
+              </el-form-item>
+
+              <el-form-item prop="verifyCode">
+                <el-input
+                  v-model="forgotForm.verifyCode"
+                  :placeholder="$t('login.verifyCode')"
+                  clearable
+                >
+                <template #append>
+                  <el-button :disabled="isCounting" class="w-40 hover:!text-[#409eff]" @click="onForGetVerCode">{{ isCounting ? `${countdown}` + $t('login.seconds') : $t('login.getVerCode') }}</el-button>
+                </template>
+                <template #prefix>
+                  <el-icon><Compass /></el-icon>
+                </template>
+                </el-input>
+              </el-form-item>
+
+              <el-form-item prop="password">
+                <el-input
+                  v-model="forgotForm.password"
+                  :placeholder="$t('login.password')"
+                  show-password
+                  clearable
+                >
+                <template #prefix>
+                  <el-icon><Lock /></el-icon>
+                </template>
+                </el-input>
+              </el-form-item>
+
+              <el-form-item prop="confirmPassword">
+                <el-input
+                  v-model="forgotForm.confirmPassword"
+                  :placeholder="$t('login.surePassword')"
+                  show-password
+                  clearable
+                >
+                <template #prefix>
+                  <el-icon><Lock /></el-icon>
+                </template>
+                </el-input>
+              </el-form-item>
+
+              <el-button class="w-full" type="success" @click="currentModule = 'login'">
+                {{ $t('login.reSuccess') }}
+              </el-button>
+            </el-form>
+
+            <div class="flex justify-center mt-4 text-sm text-gray-500 dark:text-gray-400">
+              <span class="cursor-pointer hover:text-[#409eff] transition-colors" @click="currentModule = 'login'">
+                ⬅ {{ $t('login.backLogin') }}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

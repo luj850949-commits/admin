@@ -5,6 +5,7 @@ import '@/style/main.css'
 import '@/style/tailwindcss.css'
 // 暗黑模式
 import 'element-plus/theme-chalk/dark/css-vars.css'
+import 'element-plus/dist/index.css'
 // 国际化
 import i18n from './locales'
 
