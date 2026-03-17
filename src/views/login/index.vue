@@ -6,6 +6,8 @@ import { bg, illustration, avatar } from "./utils/static"
 import { useDark, useStorage } from '@vueuse/core'
 import { Setting, User ,Lock, Compass, Iphone } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
+// 引入登录接口
+import { loginAPI } from "@/api/user";
 
 // 引入 vue-i18n 提供的方法：locale 用于切换语言
 const { t, locale } = useI18n()
@@ -26,7 +28,7 @@ const onLogin = async () => {
   if (!ruleFormRef.value) return;
   
   // 调用 validate 方法进行全局校验
-  await ruleFormRef.value.validate((valid, fields) => {
+  await ruleFormRef.value.validate(async (valid, fields) => {
     if (valid) {
       // 校验全部通过！接下来走验证码比对逻辑
       if (ruleForm.verifyCode.toLowerCase() !== generatedCode.value.toLowerCase()) {
@@ -35,16 +37,27 @@ const onLogin = async () => {
         drawVerifyCode();
         return;
       }
-
-      // 开始真正的登录请求动画
-      loading.value = true;
-      console.log("前端校验全部通过！准备提交数据：", ruleForm);
-      
-      setTimeout(() => {
-        loading.value = false;
+      try{
+        // 开始真正的登录请求
+        loading.value = true;
+        const res = await loginAPI({
+          username: ruleForm.username,
+          password: ruleForm.password
+        })
         ElMessage.success("登录成功！");
-      }, 1000);
-
+        // console.log(res)
+        localStorage.setItem("token", res.token);
+      } catch(error) {
+        console.log("登录流程被中断：", error);
+        // 只要登录失败，为了安全，自动刷新一次验证码
+        if (error instanceof Error) {
+            ruleForm.verifyCode = "";
+            drawVerifyCode();
+        }
+      } finally {
+        // 不管成功还是失败，最后都要把按钮的 loading 状态关掉
+        loading.value = false;
+      }
     } else {
       // 校验未通过，Element Plus 会自动在输入框下方显示红字提示
       console.log("表单校验未通过", fields);
