@@ -4,11 +4,12 @@ import type { FormInstance, FormRules, FormItemRule } from "element-plus";
 import { ElMessage } from "element-plus"
 import { bg, illustration, avatar } from "./utils/static"
 import { useDark, useStorage } from '@vueuse/core'
-import { Setting, User ,Lock, Compass, Iphone } from '@element-plus/icons-vue'
+import { User ,Lock, Compass, Iphone } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { loginAPI } from "@/api/user";
-import { useUserStore } from '@/stores' 
+import { useUserStore } from '@/stores'
+import globalization from '@/assets/svg/globalization.svg'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -312,7 +313,11 @@ const forgotRules = reactive<FormRules>({
       />
       <!-- 国际化 -->
       <el-dropdown trigger="click" @command="handleLangChange">
-        <el-icon class="ml-6 text-gray-600 dark:text-gray-300 hover:!text-[#409eff] transition-colors cursor-pointer outline-none" size="22px"><Setting /></el-icon>
+        <!-- <el-icon class="ml-6 text-gray-600 dark:text-gray-300 hover:!text-[#409eff] transition-colors cursor-pointer outline-none" size="22px"><Setting /></el-icon> -->
+        <!-- <globalization></globalization> -->
+        <globalization
+          class="hover:text-primary hover:bg-transparent! size-5 ml-1.5 cursor-pointer outline-hidden duration-300"
+        />
         <template #dropdown>
           <el-dropdown-menu class="lang-dropdown">
             <el-dropdown-item command="zh" :class="{'is-active': currentLang === 'zh'}">
@@ -336,7 +341,7 @@ const forgotRules = reactive<FormRules>({
     <div class="login-container">
       <!-- 左侧插画 -->
       <div class="img">
-        <img :src="illustration" alt="登录插画" />
+        <illustration></illustration>
       </div>
 
       <!-- 右侧登录窗口 -->
@@ -345,10 +350,7 @@ const forgotRules = reactive<FormRules>({
         <div class="login-form">
           <!-- 登录窗口上方logo -->
           <div class="flex justify-center mb-6">
-            <img 
-              :src="avatar" 
-              class="w-[100px] h-[100px]" 
-            />
+            <avatar class="w-[100px] h-[100px]" />
           </div>
           <!-- 登录窗口 -->
           <div v-if="currentModule === 'login'">

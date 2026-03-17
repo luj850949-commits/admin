@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
@@ -12,6 +11,8 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import tailwindcss from '@tailwindcss/vite'
 // 引入 Mock 插件
 import { viteMockServe } from 'vite-plugin-mock'
+// svg 插件
+import svgLoader from 'vite-svg-loader'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -32,7 +33,9 @@ export default defineConfig({
     viteMockServe({
       mockPath: 'mock', // 指定 mock 文件夹路径
       enable: true,     // 开启 mock 功能
-    })
+    }),
+    // svg插件
+    svgLoader()
   ],
   resolve: {
     alias: {
