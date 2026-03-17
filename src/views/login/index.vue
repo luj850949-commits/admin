@@ -6,8 +6,11 @@ import { bg, illustration, avatar } from "./utils/static"
 import { useDark, useStorage } from '@vueuse/core'
 import { Setting, User ,Lock, Compass, Iphone } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 // 引入登录接口
 import { loginAPI } from "@/api/user";
+
+const router = useRouter()
 
 // 引入 vue-i18n 提供的方法：locale 用于切换语言
 const { t, locale } = useI18n()
@@ -47,6 +50,9 @@ const onLogin = async () => {
         ElMessage.success("登录成功！");
         // console.log(res)
         localStorage.setItem("token", res.token);
+        setTimeout(() => {
+          router.push('/')
+        }, 1000);
       } catch(error) {
         console.log("登录流程被中断：", error);
         // 只要登录失败，为了安全，自动刷新一次验证码
@@ -219,7 +225,7 @@ const startCountdown = () => {
     }
   }, 1000);
 };
-// 自定义验证再次输入密码
+// 自定义验证注册再次输入密码
 const rePassword = (rule: FormItemRule, value: string, callback: (error?: Error) => void) => {
   if(value !== registerForm.password){
     return callback(new Error(t('login.rePassword')));
@@ -228,6 +234,7 @@ const rePassword = (rule: FormItemRule, value: string, callback: (error?: Error)
     callback();
   }
 };
+
 const registerRules = reactive<FormRules>({
   username: [
     { required: true, message: t('login.usernameEmpty'), trigger: "blur" }
@@ -263,6 +270,15 @@ const onForGetVerCode = async() => {
   ElMessage.success(t('login.verCodeSend'));
   startCountdown();
 }
+// 自定义验证重置密码再次输入密码
+const reForgotPassword = (rule: FormItemRule, value: string, callback: (error?: Error) => void) => {
+  if(value !== forgotForm.password){
+    return callback(new Error(t('login.rePassword')));
+  }else{
+    // 校验通过
+    callback();
+  }
+};
 const forgotRules = reactive<FormRules>({
   phone: [
     { required: true, message: t('login.phoneEmpty'), trigger: ["blur"] },
@@ -276,7 +292,7 @@ const forgotRules = reactive<FormRules>({
   ],
   confirmPassword: [
     { required: true, validator: validatePassword, trigger: ["blur"] },
-    { validator: rePassword, trigger: ["blur"] }
+    { validator: reForgotPassword, trigger: ["blur"] }
   ]
 });
 </script>

@@ -2,7 +2,6 @@
 import { computed } from 'vue';
 import { useStorage } from '@vueuse/core';
 
-import Login from '@/views/login/index.vue'
 // 引入 Element Plus 官方提供的中英文语言包对象
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import en from 'element-plus/es/locale/lang/en';
@@ -18,7 +17,7 @@ const epLocale = computed(() => {
 
 <template>
   <el-config-provider :locale="epLocale">
-    <Login></Login>
+    <router-view></router-view>
   </el-config-provider>
 </template>
 
