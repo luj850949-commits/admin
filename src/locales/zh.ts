@@ -27,5 +27,10 @@ export default {
     phoneType: '请输入正确的手机号码',
     seconds: '后重新获取',
     verCodeSend: '验证码已发送，请注意查收！',
+    verCodeErr: '验证码输入错误，请重新输入',
+    submitSuc: '登陆成功!',
+  },
+  layout: {
+    
   }
 }

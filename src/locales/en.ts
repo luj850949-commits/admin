@@ -27,5 +27,10 @@ export default {
     phoneType: 'Please enter a valid mobile phone number.',
     seconds: 'Seconds',
     verCodeSend: 'Verification code has been sent, please check your inbox!',
+    verCodeErr: 'The verification code was entered incorrectly. Please enter it again.',
+    submitSuc: 'Login successful!',
+  },
+  layout: {
+    
   }
 }

@@ -31,11 +31,11 @@ const onLogin = async () => {
   if (!ruleFormRef.value) return;
   
   // 调用 validate 方法进行全局校验
-  await ruleFormRef.value.validate(async (valid, fields) => {
+  await ruleFormRef.value.validate(async (valid) => {
     if (valid) {
       // 校验全部通过！接下来走验证码比对逻辑
       if (ruleForm.verifyCode.toLowerCase() !== generatedCode.value.toLowerCase()) {
-        ElMessage.error("验证码输入错误，请重新输入");
+        ElMessage.error(t('login.verCodeErr'));
         ruleForm.verifyCode = "";
         drawVerifyCode();
         return;
@@ -47,14 +47,14 @@ const onLogin = async () => {
           username: ruleForm.username,
           password: ruleForm.password
         })
-        ElMessage.success("登录成功！");
+        ElMessage.success(t('login.submitSuc'));
         // console.log(res)
         localStorage.setItem("token", res.token);
         setTimeout(() => {
           router.push('/')
         }, 1000);
       } catch(error) {
-        console.log("登录流程被中断：", error);
+        console.log(error)
         // 只要登录失败，为了安全，自动刷新一次验证码
         if (error instanceof Error) {
             ruleForm.verifyCode = "";
@@ -64,9 +64,6 @@ const onLogin = async () => {
         // 不管成功还是失败，最后都要把按钮的 loading 状态关掉
         loading.value = false;
       }
-    } else {
-      // 校验未通过，Element Plus 会自动在输入框下方显示红字提示
-      console.log("表单校验未通过", fields);
     }
   });
 };
