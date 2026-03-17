@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { DataBoard, Document } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores'
 
 const router = useRouter()
+const userStore = useUserStore()
 
 // 简单的退出登录逻辑
 const handleLogout = () => {
   // 清除本地存储的 Token
-  localStorage.removeItem('token')
+  userStore.clearUserInfo()
   // 跳转回登录页
   router.push('/login')
 }
@@ -45,7 +47,7 @@ const handleLogout = () => {
       <el-container>
         
         <el-header class="bg-white border-b flex items-center justify-between px-5 shadow-sm h-[60px]">
-          <div class="text-gray-600 font-medium">欢迎回来，管理员</div>
+          <div class="text-gray-600 font-medium">欢迎回来，{{ userStore.username }}</div>
           
           <el-button type="danger" plain size="small" @click="handleLogout">
             退出登录

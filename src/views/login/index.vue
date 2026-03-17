@@ -7,10 +7,11 @@ import { useDark, useStorage } from '@vueuse/core'
 import { Setting, User ,Lock, Compass, Iphone } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-// 引入登录接口
 import { loginAPI } from "@/api/user";
+import { useUserStore } from '@/stores' 
 
 const router = useRouter()
+const userStore = useUserStore()
 
 // 引入 vue-i18n 提供的方法：locale 用于切换语言
 const { t, locale } = useI18n()
@@ -48,8 +49,8 @@ const onLogin = async () => {
           password: ruleForm.password
         })
         ElMessage.success(t('login.submitSuc'));
-        // console.log(res)
-        localStorage.setItem("token", res.token);
+        userStore.setToken(res.token)
+        userStore.setUsername(res.username)
         setTimeout(() => {
           router.push('/')
         }, 1000);
