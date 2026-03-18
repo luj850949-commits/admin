@@ -3,19 +3,20 @@ import { ref, reactive, onMounted, onUpdated } from "vue";
 import type { FormInstance, FormRules, FormItemRule } from "element-plus";
 import { ElMessage } from "element-plus"
 import { bg, illustration, avatar } from "./utils/static"
-import { useDark, useStorage } from '@vueuse/core'
+import { useDark } from '@vueuse/core'
 import { User ,Lock, Compass, Iphone } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { loginAPI } from "@/api/user";
 import { useUserStore } from '@/stores'
-import globalization from '@/assets/svg/globalization.svg'
+
+import translate from "@/components/translate.vue";
 
 const router = useRouter()
 const userStore = useUserStore()
 
 // 引入 vue-i18n 提供的方法：locale 用于切换语言
-const { t, locale } = useI18n()
+const { t } = useI18n()
 
 const loading = ref(false);
 const ruleFormRef = ref<FormInstance>();
@@ -74,13 +75,6 @@ const onLogin = async () => {
 const isDark = useDark({
   disableTransition: false // 关闭自带的“禁用过渡动画”功能
 })
-
-// 国际化处理
-const currentLang = useStorage('locale', 'zhCn');
-const handleLangChange = (command: string) => {
-  currentLang.value = command;
-  locale.value = command;
-}
 
 // 验证码
 // 1. 验证码相关的响应式变量
@@ -312,30 +306,7 @@ const forgotRules = reactive<FormRules>({
         style="--el-switch-on-color: #409eff; --el-switch-off-color: #f2f2f2"
       />
       <!-- 国际化 -->
-      <el-dropdown trigger="click" @command="handleLangChange">
-        <!-- <el-icon class="ml-6 text-gray-600 dark:text-gray-300 hover:!text-[#409eff] transition-colors cursor-pointer outline-none" size="22px"><Setting /></el-icon> -->
-        <!-- <globalization></globalization> -->
-        <globalization
-          class="hover:text-primary hover:bg-transparent! size-5 ml-1.5 cursor-pointer outline-hidden duration-300"
-        />
-        <template #dropdown>
-          <el-dropdown-menu class="lang-dropdown">
-            <el-dropdown-item command="zh" :class="{'is-active': currentLang === 'zh'}">
-              <span class="w-5 inline-block text-center mr-1">
-                <span v-if="currentLang === 'zh'">✔</span>
-              </span> 
-              简体中文
-            </el-dropdown-item>
-            
-            <el-dropdown-item command="en" :class="{'is-active': currentLang === 'en'}">
-              <span class="w-5 inline-block text-center mr-1">
-                <span v-if="currentLang === 'en'">✔</span>
-              </span> 
-              English
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+      <translate></translate>
     </div>
 
     <div class="login-container">

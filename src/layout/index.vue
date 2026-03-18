@@ -2,6 +2,9 @@
 import { DataBoard, Document } from '@element-plus/icons-vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores'
+import { Setting } from '@element-plus/icons-vue'
+
+import translate from '@/components/translate.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -44,10 +47,17 @@ const handleLogout = () => {
         
         <el-header class="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between px-5 shadow-sm h-[60px] transition-colors duration-300">
           <div class="text-gray-600 dark:text-gray-300 font-medium">欢迎回来，{{ userStore.username }}</div>
-          
-          <el-button type="danger" plain size="small" @click="handleLogout">
+          <div class="h-full flex items-center justify-between gap-3">
+            <div class="hover:bg-[#000000d9] h-full flex items-center w-10 justify-center">
+              <translate></translate>
+            </div>
+            <el-icon>
+              <Setting class="hover:text-primary"/>
+            </el-icon>
+            <el-button type="danger" plain size="small" @click="handleLogout">
             退出登录
-          </el-button>
+            </el-button>
+          </div>          
         </el-header>
 
         <el-main class="bg-[#f0f2f5] dark:bg-gray-950 p-4 transition-colors duration-300">
