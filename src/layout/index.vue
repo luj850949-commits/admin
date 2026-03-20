@@ -1,82 +1,67 @@
-<script setup lang="ts">
-import { DataBoard, Document } from '@element-plus/icons-vue'
-import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores'
-import { Setting } from '@element-plus/icons-vue'
-
-import translate from '@/components/translate.vue'
-
-const router = useRouter()
-const userStore = useUserStore()
-
-const handleLogout = () => {
-  userStore.clearUserInfo()
-  router.push('/login')
-}
-</script>
-
 <template>
-  <div class="h-screen w-screen overflow-hidden bg-white dark:bg-gray-950 transition-colors duration-300">
-    <el-container class="h-full">
+  <div class="h-screen w-full flex overflow-hidden bg-[#f0f2f5] dark:bg-gray-950 transition-colors duration-300">
+    
+    <Sidebar :is-collapse="isCollapse" />
+
+    <div class="flex-1 flex flex-col h-full min-w-0 overflow-hidden">
       
-      <el-aside width="210px" class="bg-[#304156] dark:bg-[#1a2b3c] text-white transition-all duration-300 border-r border-gray-700 dark:border-gray-800">
-        <div class="h-[60px] flex items-center justify-center font-bold text-xl border-b border-gray-700 dark:border-gray-800 tracking-widest text-white">
-          MyAdmin
+      <Navbar 
+        :is-collapse="isCollapse" 
+        @toggle-collapse="isCollapse = !isCollapse"
+        @open-settings="handleOpenSettings"
+      />
+
+      <div class="h-[34px] shrink-0 bg-white dark:bg-[#1d1e1f] border-b border-gray-100 dark:border-gray-800 px-4 flex items-center shadow-sm transition-colors duration-300">
+        <el-tag size="small" closable effect="plain" class="mr-2 border-blue-200">首页</el-tag>
+      </div>
+
+      <div class="flex-1 overflow-auto p-4 relative">
+        <div class="bg-white dark:bg-[#141414] min-h-full rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 p-5 transition-colors duration-300">
+          <router-view v-slot="{ Component }">
+            <transition name="fade-transform" mode="out-in">
+              <component :is="Component" />
+            </transition>
+          </router-view>
         </div>
-        
-        <el-menu
-          active-text-color="#409eff"
-          background-color="#304156"
-          text-color="#bfcbd9"
-          class="border-r-0"
-          default-active="/dashboard"
-          router
-        >
-          <el-menu-item index="/dashboard">
-            <el-icon><DataBoard /></el-icon>
-            <span>控制台大盘</span>
-          </el-menu-item>
-          <el-menu-item index="/article">
-            <el-icon><Document /></el-icon>
-            <span>文章管理</span>
-          </el-menu-item>
-        </el-menu>
-      </el-aside>
+      </div>
+      
+    </div>
 
-      <el-container>
-        
-        <el-header class="bg-white dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between px-5 shadow-sm h-[60px] transition-colors duration-300">
-          <div class="text-gray-600 dark:text-gray-300 font-medium">欢迎回来，{{ userStore.username }}</div>
-          <div class="h-full flex items-center justify-between gap-3">
-            <div class="hover:bg-[#000000d9] h-full flex items-center w-10 justify-center">
-              <translate></translate>
-            </div>
-            <el-icon>
-              <Setting class="hover:text-primary"/>
-            </el-icon>
-            <el-button type="danger" plain size="small" @click="handleLogout">
-            退出登录
-            </el-button>
-          </div>          
-        </el-header>
+    <SettingsDrawer ref="settingsDrawerRef" />
 
-        <el-main class="bg-[#f0f2f5] dark:bg-gray-950 p-4 transition-colors duration-300">
-          <div class="w-full h-full rounded-xl overflow-auto pr-1">
-            <router-view></router-view>
-          </div>
-        </el-main>
-        
-      </el-container>
-    </el-container>
   </div>
 </template>
 
-<style scoped>
-.el-menu {
-  border-right: none;
+<script setup lang="ts">
+import { ref } from 'vue'
+import Sidebar from './components/Sidebar.vue'
+import Navbar from './components/Navbar.vue'
+import SettingsDrawer from './components/SettingsDrawer.vue'
+
+// 控制侧边栏展开/折叠的状态
+const isCollapse = ref<boolean>(false)
+
+// 设置抽屉实例
+const settingsDrawerRef = ref<InstanceType<typeof SettingsDrawer> | null>(null)
+
+// 处理打开抽屉
+const handleOpenSettings = (): void => {
+  settingsDrawerRef.value?.openDrawer()
 }
-/* 深度覆盖菜单 hover 时的背景色 */
-:deep(.el-menu-item:hover) {
-  background-color: rgba(64, 158, 255, 0.1) !important;
+</script>
+
+<style scoped>
+/* Layout 页面只需保留核心的页面切换动画即可 */
+.fade-transform-enter-active,
+.fade-transform-leave-active {
+  transition: all 0.3s ease;
+}
+.fade-transform-enter-from {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+.fade-transform-leave-to {
+  opacity: 0;
+  transform: translateX(20px);
 }
 </style>

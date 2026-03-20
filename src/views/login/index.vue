@@ -54,6 +54,7 @@ const onLogin = async () => {
         userStore.setToken(res.token)
         userStore.setUsername(res.username)
         setTimeout(() => {
+          loading.value = false;
           router.push('/')
         }, 1000);
       } catch(error) {
@@ -63,8 +64,6 @@ const onLogin = async () => {
             ruleForm.verifyCode = "";
             drawVerifyCode();
         }
-      } finally {
-        // 不管成功还是失败，最后都要把按钮的 loading 状态关掉
         loading.value = false;
       }
     }
@@ -358,20 +357,21 @@ const forgotRules = reactive<FormRules>({
                   v-model="ruleForm.verifyCode"
                   :placeholder="$t('login.verifyCode')"
                   clearable
+                  @keyup.enter="onLogin"
                 >
-                <template #append>
-                  <canvas
-                    ref="verifyCanvasRef"
-                    width="110"
-                    height="38"
-                    class="cursor-pointer"
-                    :title="$t('login.reVerifyCode')"
-                    @click="drawVerifyCode"
-                  ></canvas>
-                </template>
-                <template #prefix>
-                  <el-icon><Compass /></el-icon>
-                </template>
+                  <template #append>
+                    <canvas
+                      ref="verifyCanvasRef"
+                      width="110"
+                      height="38"
+                      class="cursor-pointer"
+                      :title="$t('login.reVerifyCode')"
+                      @click="drawVerifyCode"
+                    ></canvas>
+                  </template>
+                  <template #prefix>
+                    <el-icon><Compass /></el-icon>
+                  </template>
                 </el-input>
               </el-form-item>
 
