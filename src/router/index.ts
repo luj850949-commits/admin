@@ -19,8 +19,14 @@ const router = createRouter({
           path: "dashboard",
           name: "Dashboard",
           component: () => import("@/views/dashboard/index.vue"), // 渲染在 Layout 内部的业务页
+          meta: { title: '首页' }
         },
-        // ... 其他业务页面
+        {
+          path: 'profile',
+          name: 'Profile',
+          component: () => import('@/views/profile/index.vue'),
+          meta: { title: '个人中心' }
+        },
       ]
     }
   ],
