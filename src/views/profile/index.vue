@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col lg:flex-row gap-4 h-full">
     
-    <!-- ================= 左侧：用户资料卡片 ================= -->
+    <!--  左侧：用户资料卡片  -->
     <el-card shadow="never" class="w-full lg:w-[350px] shrink-0 border-none rounded-xl">
       <template #header>
         <div class="font-bold text-gray-800 dark:text-gray-200">个人信息</div>
@@ -17,13 +17,12 @@
         </div>
         
         <h2 class="mt-4 text-xl font-bold text-gray-800 dark:text-white">{{ userStore.username }}</h2>
-        <p class="mt-1 text-sm text-gray-500">超级管理员 (Super Admin)</p>
       </div>
 
       <div class="py-4 space-y-4 text-sm">
         <div class="flex justify-between items-center text-gray-600 dark:text-gray-400">
           <div class="flex items-center"><el-icon class="mr-2"><User /></el-icon>用户昵称</div>
-          <span class="text-gray-800 dark:text-gray-200">管理员</span>
+          <span class="text-gray-800 dark:text-gray-200">{{ userStore.username }}</span>
         </div>
         <div class="flex justify-between items-center text-gray-600 dark:text-gray-400">
           <div class="flex items-center"><el-icon class="mr-2"><Phone /></el-icon>手机号码</div>
@@ -31,7 +30,7 @@
         </div>
         <div class="flex justify-between items-center text-gray-600 dark:text-gray-400">
           <div class="flex items-center"><el-icon class="mr-2"><Message /></el-icon>用户邮箱</div>
-          <span class="text-gray-800 dark:text-gray-200">admin@example.com</span>
+          <span class="text-gray-800 dark:text-gray-200">2244636579@qq.com</span>
         </div>
         <div class="flex justify-between items-center text-gray-600 dark:text-gray-400">
           <div class="flex items-center"><el-icon class="mr-2"><Monitor /></el-icon>所属部门</div>
@@ -40,7 +39,7 @@
       </div>
     </el-card>
 
-    <!-- ================= 右侧：资料编辑区 ================= -->
+    <!--  右侧：资料编辑区  -->
     <el-card shadow="never" class="flex-1 border-none rounded-xl">
       <el-tabs v-model="activeTab" class="profile-tabs">
         
@@ -125,7 +124,7 @@ const userStore = useUserStore()
 // 控制当前激活的 Tab
 const activeTab = ref<string>('info')
 
-// ================= 基本资料逻辑 =================
+//  基本资料逻辑 
 const infoFormRef = ref<FormInstance>()
 
 interface InfoForm {
@@ -136,9 +135,9 @@ interface InfoForm {
 }
 
 const infoForm = reactive<InfoForm>({
-  nickname: '管理员',
-  phone: '13800138000',
-  email: 'admin@example.com',
+  nickname: userStore.username,
+  phone: '13888888888',
+  email: '2244636579@qq.com',
   bio: '前端开发工程师，热爱生活，热爱编码。'
 })
 
@@ -169,7 +168,7 @@ const resetForm = (formEl: FormInstance | undefined): void => {
   formEl.resetFields()
 }
 
-// ================= 修改密码逻辑 =================
+//  修改密码逻辑 
 const pwdFormRef = ref<FormInstance>()
 
 interface PwdForm {
