@@ -17,7 +17,13 @@ import svgLoader from 'vite-svg-loader'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => tag.startsWith('deep-chat')
+        }
+      }
+    }),
     vueJsx(),
     vueDevTools(),
     // ElementUI 自动导入

@@ -22,6 +22,12 @@ const router = createRouter({
           meta: { title: localStorage.getItem('locale') === 'zh' ? '首页' : 'Home' }
         },
         {
+          path: 'chat',
+          name: 'Chat',
+          component: () => import('@/views/chat/index.vue'),
+          meta: { title: localStorage.getItem('locale') === 'zh' ? 'AI 助手' : 'AI Assistant' }
+        },
+        {
           path: 'profile',
           name: 'Profile',
           component: () => import('@/views/profile/index.vue'),

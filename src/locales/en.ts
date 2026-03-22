@@ -32,6 +32,7 @@ export default {
   },
   layout: {
     frontPage: 'Home',
+    chat: 'AI Assistant',
     profile: 'Profile',
     logout: 'Logout',
     systemConfiguration: 'System Configuration',

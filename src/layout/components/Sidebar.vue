@@ -25,9 +25,9 @@
           <template #title><span>{{ t('layout.frontPage') }}</span></template>
         </el-menu-item>
         
-        <el-menu-item index="/article">
-          <el-icon><Document /></el-icon>
-          <template #title><span>{{ t('layout.articleManagement') }}</span></template>
+        <el-menu-item index="/chat">
+          <el-icon><ChatDotRound /></el-icon>
+          <template #title><span>{{ t('layout.chat') }}</span></template>
         </el-menu-item>
         
         <el-menu-item index="/profile">
@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { DataBoard, Document, User } from '@element-plus/icons-vue'
+import { DataBoard, ChatDotRound, User } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n()
 

@@ -34,6 +34,7 @@ export default {
   },
   layout: {
     frontPage: '首页',
+    chat: 'AI 助手',
     profile: '个人中心',
     logout: '退出登录',
     systemConfiguration: '系统配置',
