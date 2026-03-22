@@ -10,11 +10,12 @@
         <span v-else class="text-xl">Ad</span>
       </transition>
     </div>
-    
+    <!-- :default-active="$route.path" -->
+     <!-- default-active="/dashboard" -->
     <el-scrollbar class="flex-1">
       <el-menu
         class="border-none w-full pure-menu-vertical"
-        default-active="/dashboard"
+        :default-active="$route.path"
         :collapse="isCollapse"
         :collapse-transition="false"
         router

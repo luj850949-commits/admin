@@ -11,10 +11,6 @@
         @open-settings="handleOpenSettings"
       />
 
-      <div class="h-[34px] shrink-0 bg-white dark:bg-[#1d1e1f] border-b border-gray-100 dark:border-gray-800 px-4 flex items-center shadow-sm transition-colors duration-300">
-        <el-tag size="small" closable effect="plain" class="mr-2 border-blue-200">首页</el-tag>
-      </div>
-
       <div class="flex-1 overflow-auto p-4 relative">
         <div class="bg-white dark:bg-[#141414] min-h-full rounded-lg shadow-sm border border-gray-100 dark:border-gray-800 p-5 transition-colors duration-300">
           <router-view v-slot="{ Component }">
@@ -22,6 +18,7 @@
               <component :is="Component" />
             </transition>
           </router-view>
+          <!-- <router-view></router-view> -->
         </div>
       </div>
       
