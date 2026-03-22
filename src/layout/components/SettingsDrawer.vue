@@ -1,21 +1,21 @@
 <template>
   <el-drawer 
     v-model="drawerVisible" 
-    title="系统配置" 
+    :title="t('layout.systemConfiguration')"
     size="300px"
     append-to-body
   >
     <div class="flex flex-col space-y-6">
       <div>
-        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200 mb-4">主题模式</h3>
+        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200 mb-4">{{ t('layout.themeMode') }}</h3>
         <div class="flex items-center justify-between">
-          <span class="text-sm text-gray-600 dark:text-gray-400">暗黑模式</span>
+          <span class="text-sm text-gray-600 dark:text-gray-400">{{ t('layout.darkMode') }}</span>
           <el-switch v-model="isDark" @change="toggleDark" />
         </div>
       </div>
       <el-divider class="my-0 border-gray-100 dark:border-gray-800" />
       <div>
-        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200 mb-4">系统语言</h3>
+        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200 mb-4">{{ t('layout.systemLanguage') }}</h3>
         <el-radio-group v-model="language" class="w-full flex">
           <el-radio-button label="zh" class="flex-1 text-center">简体中文</el-radio-button>
           <el-radio-button label="en" class="flex-1 text-center">English</el-radio-button>
@@ -24,7 +24,7 @@
       <el-divider class="my-0 border-gray-100 dark:border-gray-800" />
       <div class="pt-4 mt-auto">
         <el-button type="danger" class="w-full" plain @click="handleLogout">
-          <el-icon class="mr-1"><SwitchButton /></el-icon> 退出当前账号
+          <el-icon class="mr-1"><SwitchButton /></el-icon> {{ t('layout.logout') }}
         </el-button>
       </div>
     </div>
@@ -36,6 +36,8 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { SwitchButton } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const router = useRouter()
 const userStore = useUserStore()

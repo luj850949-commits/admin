@@ -31,6 +31,12 @@ export default {
     submitSuc: 'Login successful!',
   },
   layout: {
-    
+    frontPage: 'Home',
+    profile: 'Profile',
+    logout: 'Logout',
+    systemConfiguration: 'System Configuration',
+    themeMode: 'Theme Mode',
+    darkMode: 'Dark Mode',
+    systemLanguage: 'System Language',
   }
 }

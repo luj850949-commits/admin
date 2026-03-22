@@ -23,7 +23,9 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n' 
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
@@ -42,7 +44,7 @@ const getBreadcrumb = (): void => {
   if (matched.length === 0 || matched[0]?.name !== 'Dashboard') {
     result.push({ 
       path: '/dashboard', 
-      title: '首页' 
+      title: t('layout.frontPage')
     })
   }
 

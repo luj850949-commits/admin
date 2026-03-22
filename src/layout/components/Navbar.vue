@@ -24,8 +24,8 @@
         </div>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item divided @click="toProfile">个人中心</el-dropdown-item>
-            <el-dropdown-item divided @click="handleLogout">退出登录</el-dropdown-item>
+            <el-dropdown-item divided @click="toProfile">{{ t('layout.profile') }}</el-dropdown-item>
+            <el-dropdown-item divided @click="handleLogout">{{ t('layout.logout') }}</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -47,6 +47,8 @@ import { Fold, Setting } from '@element-plus/icons-vue'
 import Breadcrumb from './Breadcrumb.vue'
 import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+const { t } = useI18n()
 
 const userStore = useUserStore()
 const router = useRouter()

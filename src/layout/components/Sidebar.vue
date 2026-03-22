@@ -22,17 +22,17 @@
       >
         <el-menu-item index="/dashboard">
           <el-icon><DataBoard /></el-icon>
-          <template #title><span>首页</span></template>
+          <template #title><span>{{ t('layout.frontPage') }}</span></template>
         </el-menu-item>
         
         <el-menu-item index="/article">
           <el-icon><Document /></el-icon>
-          <template #title><span>文章管理</span></template>
+          <template #title><span>{{ t('layout.articleManagement') }}</span></template>
         </el-menu-item>
         
         <el-menu-item index="/profile">
           <el-icon><User /></el-icon>
-          <template #title><span>个人中心</span></template>
+          <template #title><span>{{ t('layout.profile') }}</span></template>
         </el-menu-item>
       </el-menu>
     </el-scrollbar>
@@ -41,6 +41,8 @@
 
 <script setup lang="ts">
 import { DataBoard, Document, User } from '@element-plus/icons-vue'
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n()
 
 interface SidebarProps {
   isCollapse: boolean;

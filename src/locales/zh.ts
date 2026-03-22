@@ -31,6 +31,12 @@ export default {
     submitSuc: '登陆成功!',
   },
   layout: {
-    
+    frontPage: '首页',
+    profile: '个人中心',
+    logout: '退出登录',
+    systemConfiguration: '系统配置',
+    themeMode: '主题模式',
+    darkMode: '暗黑模式',
+    systemLanguage: '系统语言',
   }
 }
