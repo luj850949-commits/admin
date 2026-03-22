@@ -1,3 +1,5 @@
+import type { set } from "@vueuse/core";
+
 export default {
   login: {
     title: '用户登录',
@@ -38,5 +40,39 @@ export default {
     themeMode: '主题模式',
     darkMode: '暗黑模式',
     systemLanguage: '系统语言',
-  }
+  },
+  profile: {
+    info: '个人信息',
+    username: '用户昵称',
+    phone: '手机号码',
+    email: '用户邮箱',
+    department: '所属部门',
+    information: '基本资料',
+    setUsername: '请输入用户昵称',
+    setPhone: '请输入手机号码',
+    setEmail: '请输入用户邮箱',
+    bio: '个人简介',
+    setBio: '用一句话介绍一下自己吧',
+    save: '保存修改',
+    reset: '重置',
+    resetPassword: '修改密码',
+    currentPassword: '旧密码',
+    setCurrentPassword: '请输入当前使用的密码',
+    newPassword: '新密码',
+    setNewPassword: '请输入新密码（不少于 6 位）',
+    confirmPassword: '确认密码',
+    setConfirmPassword: '请再次输入密码',
+    updatePassword: '更新密码',
+    nicknameEmpty: '昵称不能为空',
+    emailEmpty: '邮箱不能为空',
+    emailFormat: '请输入正确的邮箱格式',
+    phoneEmpty: '手机号不能为空',
+    phoneFormat: '请输入正确的手机号码',
+    infoSaved: '基本资料已成功保存！',
+    passwordMismatch: '两次输入的密码不一致',
+    currentPasswordEmpty: '请输入旧密码',
+    newPasswordEmpty: '请输入新密码',
+    newPasswordLength: '密码长度不能少于 6 位',
+    passwordUpdated: '密码修改成功，请妥善保管！',
+  },
 }
