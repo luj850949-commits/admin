@@ -29,7 +29,11 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-
+      <!-- 翻译按钮 -->
+      <div class="flex items-center justify-center h-full px-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <translate></translate>
+      </div>
+      <!-- 设置按钮 -->
       <div 
         class="flex items-center justify-center h-full px-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
         @click="openSettings"
@@ -49,6 +53,8 @@ import { useUserStore } from '@/stores'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
+
+import translate from '@/components/translate.vue'
 
 const userStore = useUserStore()
 const router = useRouter()

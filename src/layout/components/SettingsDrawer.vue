@@ -16,14 +16,6 @@
         </div>
       </div>
       <el-divider class="my-0 border-gray-100 dark:border-gray-800" />
-      <div>
-        <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200 mb-4">{{ t('layout.systemLanguage') }}</h3>
-        <el-radio-group v-model="language" class="w-full flex">
-          <el-radio-button label="zh" class="flex-1 text-center">简体中文</el-radio-button>
-          <el-radio-button label="en" class="flex-1 text-center">English</el-radio-button>
-        </el-radio-group>
-      </div>
-      <el-divider class="my-0 border-gray-100 dark:border-gray-800" />
       <div class="pt-4 mt-auto">
         <el-button type="danger" class="w-full" plain @click="handleLogout">
           <el-icon class="mr-1"><SwitchButton /></el-icon> {{ t('layout.logout') }}
@@ -48,7 +40,6 @@ const router = useRouter()
 const userStore = useUserStore()
 
 const drawerVisible = ref<boolean>(false)
-const language = ref<string>('zh')
 
 const openDrawer = (): void => {
   drawerVisible.value = true

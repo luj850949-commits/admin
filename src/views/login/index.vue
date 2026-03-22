@@ -290,7 +290,7 @@ const forgotRules = reactive<FormRules>({
     <img :src="bg" class="wave">
 
     <!-- 右上角控制暗黑主题和翻译的按钮 -->
-    <div class="flex-c absolute right-5 top-3">
+    <div class="flex-c absolute right-5 top-3 gap-3">
       <!-- 切换明暗主题 -->
       <changeTheme></changeTheme>
       <!-- 国际化 -->
