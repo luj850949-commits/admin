@@ -6,7 +6,7 @@ import { useStorage } from '@vueuse/core';
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
 import en from 'element-plus/es/locale/lang/en';
 
-// 这里以你之前的 currentLang 为例
+// 这里以之前的 currentLang 为例
 const currentLang = useStorage('locale', 'zh');
 
 // 用 computed 做一层动态映射

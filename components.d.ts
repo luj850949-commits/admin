@@ -12,6 +12,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    ChangeTheme: typeof import('./src/components/changeTheme.vue')['default']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
@@ -50,6 +51,7 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const ChangeTheme: typeof import('./src/components/changeTheme.vue')['default']
   const ElAlert: typeof import('element-plus/es')['ElAlert']
   const ElAside: typeof import('element-plus/es')['ElAside']
   const ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']

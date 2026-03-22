@@ -10,7 +10,9 @@
         <h3 class="text-sm font-bold text-gray-800 dark:text-gray-200 mb-4">{{ t('layout.themeMode') }}</h3>
         <div class="flex items-center justify-between">
           <span class="text-sm text-gray-600 dark:text-gray-400">{{ t('layout.darkMode') }}</span>
-          <el-switch v-model="isDark" @change="toggleDark" />
+          <!-- <el-switch v-model="isDark" @change="toggleDark" /> -->
+          <!-- 切换明暗主题 -->
+          <changeTheme></changeTheme>
         </div>
       </div>
       <el-divider class="my-0 border-gray-100 dark:border-gray-800" />
@@ -32,18 +34,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { SwitchButton } from '@element-plus/icons-vue'
 import { useUserStore } from '@/stores'
 import { useI18n } from 'vue-i18n'
+
+import changeTheme from "@/components/changeTheme.vue";
+
 const { t } = useI18n()
 
 const router = useRouter()
 const userStore = useUserStore()
 
 const drawerVisible = ref<boolean>(false)
-const isDark = ref<boolean>(false)
 const language = ref<string>('zh')
 
 const openDrawer = (): void => {
@@ -52,23 +56,6 @@ const openDrawer = (): void => {
 
 // 暴露给父组件使用
 defineExpose({ openDrawer })
-
-onMounted(() => {
-  if (localStorage.getItem('theme') === 'dark') {
-    isDark.value = true
-  }
-})
-
-// el-switch 的 change 回调
-const toggleDark = (val: string | number | boolean): void => {
-  if (Boolean(val)) {
-    document.documentElement.classList.add('dark')
-    localStorage.setItem('theme', 'dark')
-  } else {
-    document.documentElement.classList.remove('dark')
-    localStorage.setItem('theme', 'light')
-  }
-}
 
 const handleLogout = (): void => {
   userStore.clearUserInfo()

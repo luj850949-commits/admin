@@ -35,6 +35,11 @@ import Sidebar from './components/Sidebar.vue'
 import Navbar from './components/Navbar.vue'
 import SettingsDrawer from './components/SettingsDrawer.vue'
 
+// 检测系统是否开启了暗黑模式
+if (localStorage.getItem('vueuse-color-scheme') === 'dark') {
+  document.documentElement.classList.add('dark');
+}
+
 // 控制侧边栏展开/折叠的状态
 const isCollapse = ref<boolean>(false)
 

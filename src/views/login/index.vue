@@ -3,7 +3,6 @@ import { ref, reactive, onMounted, onUpdated } from "vue";
 import type { FormInstance, FormRules, FormItemRule } from "element-plus";
 import { ElMessage } from "element-plus"
 import { bg, illustration, avatar } from "./utils/static"
-import { useDark } from '@vueuse/core'
 import { User ,Lock, Compass, Iphone } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
@@ -11,6 +10,7 @@ import { loginAPI } from "@/api/user";
 import { useUserStore } from '@/stores'
 
 import translate from "@/components/translate.vue";
+import changeTheme from "@/components/changeTheme.vue";
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -69,11 +69,6 @@ const onLogin = async () => {
     }
   });
 };
-
-// 切换暗黑主题
-const isDark = useDark({
-  disableTransition: false // 关闭自带的“禁用过渡动画”功能
-})
 
 // 验证码
 // 1. 验证码相关的响应式变量
@@ -296,14 +291,8 @@ const forgotRules = reactive<FormRules>({
 
     <!-- 右上角控制暗黑主题和翻译的按钮 -->
     <div class="flex-c absolute right-5 top-3">
-      <!-- 主题 -->
-      <el-switch
-        inline-prompt
-        active-text="☀️"
-        inactive-text="🌙"
-        v-model="isDark"
-        style="--el-switch-on-color: #409eff; --el-switch-off-color: #f2f2f2"
-      />
+      <!-- 切换明暗主题 -->
+      <changeTheme></changeTheme>
       <!-- 国际化 -->
       <translate></translate>
     </div>
