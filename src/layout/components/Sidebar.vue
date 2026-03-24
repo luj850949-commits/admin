@@ -20,7 +20,7 @@
         :collapse-transition="false"
         router
       >
-        <el-menu-item index="/dashboard">
+        <el-menu-item index="/home">
           <el-icon><DataBoard /></el-icon>
           <template #title><span>{{ t('layout.frontPage') }}</span></template>
         </el-menu-item>

@@ -312,7 +312,12 @@ const forgotRules = reactive<FormRules>({
             <avatar class="w-[100px] h-[100px]" />
           </div>
           <!-- 登录窗口 -->
-          <div v-if="currentModule === 'login'">
+          <div
+            v-motion
+            :initial="{ opacity: 0, y: 100 }"
+            :enter="{ opacity: 1, y: 0 }"
+            v-if="currentModule === 'login'"
+            >
             <h2 class="text-center text-2xl font-bold text-gray-800 dark:text-white mb-6 transition-colors duration-300">{{ $t('login.title') }}</h2>
             <el-form :rules="loginRules" ref="ruleFormRef" :model="ruleForm" size="large">
               
@@ -386,7 +391,12 @@ const forgotRules = reactive<FormRules>({
           </div>
           
           <!-- 注册窗口 -->
-          <div v-else-if="currentModule === 'register'">
+          <div
+            v-motion
+            :initial="{ opacity: 0, y: 100 }"
+            :enter="{ opacity: 1, y: 0 }"
+            v-else-if="currentModule === 'register'"
+          >
             <h2 class="text-center text-2xl font-bold text-gray-800 dark:text-white mb-6">
               {{ $t('login.reregisterTitle') }}
             </h2>
@@ -470,7 +480,12 @@ const forgotRules = reactive<FormRules>({
           </div>
 
           <!-- 忘记密码 -->
-          <div v-else-if="currentModule === 'forgot'">
+          <div
+            v-motion
+            :initial="{ opacity: 0, y: 100 }"
+            :enter="{ opacity: 1, y: 0 }"
+            v-else-if="currentModule === 'forgot'"
+            >
             <h2 class="text-center text-2xl font-bold text-gray-800 dark:text-white mb-6">
               {{ $t('login.reTitle') }}
             </h2>
