@@ -17,7 +17,6 @@
             }
           }'
           :connect='{"stream": true}'
-
           :style="chatStyle"
           :messageStyles="messageStyles"
           :textInput="textInputConfig"

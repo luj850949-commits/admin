@@ -13,12 +13,12 @@ const router = createRouter({
       path: "/",
       name: "Layout",
       component: () => import("@/layout/index.vue"), // 带有侧边栏的框架
-      redirect: "/dashboard",
+      redirect: "/home",
       children: [
         {
-          path: "dashboard",
-          name: "Dashboard",
-          component: () => import("@/views/dashboard/index.vue"), // 渲染在 Layout 内部的业务页
+          path: "home",
+          name: "Home",
+          component: () => import("@/views/home/index.vue"), // 渲染在 Layout 内部的业务页
           meta: { title: localStorage.getItem('locale') === 'zh' ? '首页' : 'Home' }
         },
         {
