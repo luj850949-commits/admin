@@ -39,6 +39,15 @@
           <el-menu-item index="/error/404">404</el-menu-item>
           <el-menu-item index="/error/500">500</el-menu-item>
         </el-sub-menu>
+
+        <el-sub-menu index="result">
+          <template #title>
+            <el-icon><CircleCheck /></el-icon>
+            <span>{{ t('layout.resultPages') }}</span>
+          </template>
+          <el-menu-item index="/result/success">{{ t('layout.success') }}</el-menu-item>
+          <el-menu-item index="/result/fail">{{ t('layout.fail') }}</el-menu-item>
+        </el-sub-menu>
         
         <el-menu-item index="/profile">
           <el-icon><User /></el-icon>
@@ -50,7 +59,7 @@
 </template>
 
 <script setup lang="ts">
-import { DataBoard, ChatDotRound, User, Warning } from '@element-plus/icons-vue'
+import { DataBoard, ChatDotRound, User, Warning, CircleCheck } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n()
 

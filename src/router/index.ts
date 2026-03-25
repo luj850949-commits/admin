@@ -58,6 +58,26 @@ const router = createRouter({
               meta: { title: '500' }
             }
           ]
+        },
+        {
+          path: 'result',
+          name: 'Result',
+          redirect: "/result/success",
+          meta: { title: localStorage.getItem('locale') === 'zh' ? '结果页面' : 'Result Pages' },
+          children: [
+            {
+              path: 'success',
+              name: 'Success',
+              component: () => import('@/views/result/success.vue'),
+              meta: { title: localStorage.getItem('locale') === 'zh' ? '成功页面' : 'Success' }
+            },
+            {
+              path: 'fail',
+              name: 'Fail',
+              component: () => import('@/views/result/fail.vue'),
+              meta: { title: localStorage.getItem('locale') === 'zh' ? '失败页面' : 'Fail' }
+            }
+          ]
         }
       ]
     },
