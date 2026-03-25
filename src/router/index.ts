@@ -33,6 +33,32 @@ const router = createRouter({
           component: () => import('@/views/profile/index.vue'),
           meta: { title: localStorage.getItem('locale') === 'zh' ? '个人中心' : 'Profile' }
         },
+        {
+          path: 'error',
+          name: 'Error',
+          redirect: "/error/403",
+          meta: { title: localStorage.getItem('locale') === 'zh' ? '异常页面' : 'Error Pages' },
+          children: [
+            {
+              path: '403',
+              name: 'Error403',
+              component: () => import('@/views/error/403.vue'),
+              meta: { title: '403' }
+            },
+            {
+              path: '404',
+              name: 'Error404',
+              component: () => import('@/views/error/404.vue'),
+              meta: { title: '404' }
+            },
+            {
+              path: '500',
+              name: 'Error500',
+              component: () => import('@/views/error/500.vue'),
+              meta: { title: '500' }
+            }
+          ]
+        }
       ]
     },
     {

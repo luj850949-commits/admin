@@ -36,6 +36,7 @@ export default {
     frontPage: '首页',
     chat: 'AI 助手',
     profile: '个人中心',
+    errorPages: '异常页面',
     logout: '退出登录',
     systemConfiguration: '系统配置',
     themeMode: '主题模式',

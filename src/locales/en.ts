@@ -34,6 +34,7 @@ export default {
     frontPage: 'Home',
     chat: 'AI Assistant',
     profile: 'Profile',
+    errorPages: 'Error Pages',
     logout: 'Logout',
     systemConfiguration: 'System Configuration',
     themeMode: 'Theme Mode',

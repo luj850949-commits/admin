@@ -23,9 +23,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n' 
-
-const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
@@ -41,13 +38,6 @@ const getBreadcrumb = (): void => {
   const matched = route.matched.filter(item => item.meta && item.meta.title)
   const result: BreadcrumbItem[] = []
   
-  if (matched.length === 0 || matched[0]?.name !== 'Dashboard') {
-    result.push({ 
-      path: '/dashboard', 
-      title: t('layout.frontPage')
-    })
-  }
-
   // 映射 Vue Router 的原生对象到我们的严格接口
   matched.forEach(item => {
     result.push({

@@ -34,13 +34,23 @@
           <el-icon><User /></el-icon>
           <template #title><span>{{ t('layout.profile') }}</span></template>
         </el-menu-item>
+
+        <el-sub-menu index="error">
+          <template #title>
+            <el-icon><Warning /></el-icon>
+            <span>{{ t('layout.errorPages') }}</span>
+          </template>
+          <el-menu-item index="/error/403">403</el-menu-item>
+          <el-menu-item index="/error/404">404</el-menu-item>
+          <el-menu-item index="/error/500">500</el-menu-item>
+        </el-sub-menu>
       </el-menu>
     </el-scrollbar>
   </div>
 </template>
 
 <script setup lang="ts">
-import { DataBoard, ChatDotRound, User } from '@element-plus/icons-vue'
+import { DataBoard, ChatDotRound, User, Warning } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n';
 const { t } = useI18n()
 

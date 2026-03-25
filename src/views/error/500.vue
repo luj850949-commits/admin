@@ -10,7 +10,7 @@ const router = useRouter();
 </script>
 
 <template>
-  <div class="flex-c flex-col md:flex-row min-h-full w-full p-4 md:p-0">
+  <div class="flex-c flex-col md:flex-row min-h-screen w-full p-4 md:p-0">
     <noServer />
     <div class="mt-8 md:ml-12 md:mt-0 text-center md:text-left">
       <p
