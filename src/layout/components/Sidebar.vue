@@ -29,11 +29,6 @@
           <el-icon><ChatDotRound /></el-icon>
           <template #title><span>{{ t('layout.chat') }}</span></template>
         </el-menu-item>
-        
-        <el-menu-item index="/profile">
-          <el-icon><User /></el-icon>
-          <template #title><span>{{ t('layout.profile') }}</span></template>
-        </el-menu-item>
 
         <el-sub-menu index="error">
           <template #title>
@@ -44,6 +39,11 @@
           <el-menu-item index="/error/404">404</el-menu-item>
           <el-menu-item index="/error/500">500</el-menu-item>
         </el-sub-menu>
+        
+        <el-menu-item index="/profile">
+          <el-icon><User /></el-icon>
+          <template #title><span>{{ t('layout.profile') }}</span></template>
+        </el-menu-item>
       </el-menu>
     </el-scrollbar>
   </div>
