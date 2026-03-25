@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useStorage } from '@vueuse/core';
+import { useStorage, useDark } from '@vueuse/core';
 
 // 引入 Element Plus 官方提供的中英文语言包对象
 import zhCn from 'element-plus/es/locale/lang/zh-cn';
@@ -13,6 +13,10 @@ const currentLang = useStorage('locale', 'zh');
 const epLocale = computed(() => {
   return currentLang.value === 'zh' ? zhCn : en;
 });
+
+useDark({
+  disableTransition: false // 关闭自带的“禁用过渡动画”功能
+})
 </script>
 
 <template>
