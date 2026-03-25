@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { getDashboardData, type ChartDataItem, type ProgressDataItem, type LatestNewsDataItem } from "@/api/dashboard";
+import { getDashboardData, type ChartDataItem, type ProgressDataItem, type LatestNewsDataItem, type BarChartDataItem } from "@/api/dashboard";
+
+import ChartBar from "./components/charts/ChartBar.vue";
 
 defineOptions({
   name: "Home"
@@ -11,6 +13,10 @@ const curWeek = ref(1);
 const chartData = ref<ChartDataItem[]>([]);
 const progressData = ref<ProgressDataItem[]>([]);
 const latestNewsData = ref<LatestNewsDataItem[]>([]);
+const barChartData = ref<BarChartDataItem[]>([
+  { requireData: [], questionData: [] },
+  { requireData: [], questionData: [] } // 给个默认空骨架防止初次渲染报错
+]);
 
 // 获取数据
 const fetchData = async () => {
@@ -19,6 +25,7 @@ const fetchData = async () => {
     chartData.value = res.chartData;
     progressData.value = res.progressData;
     latestNewsData.value = res.latestNewsData;
+    barChartData.value = res.barChartData;
   } catch (error) {
     console.error("获取看板数据失败:", error);
   }
@@ -66,8 +73,12 @@ onMounted(() => {
               <el-radio-button :label="1">本周</el-radio-button>
             </el-radio-group>
           </div>
-          <div style="height: 300px; background-color: #f8f9fa; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-            <span style="color: #909399;">柱状图区域 (待封装 ECharts 组件)</span>
+          <div class="mt-3">
+            <ChartBar
+              v-if="barChartData.length > 0"
+              :requireData="barChartData[curWeek]!.requireData"
+              :questionData="barChartData[curWeek]!.questionData"
+            />
           </div>
         </el-card>
       </el-col>

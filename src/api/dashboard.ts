@@ -20,10 +20,16 @@ export interface LatestNewsDataItem {
   resolveNumber: number;
 }
 
+export interface BarChartDataItem {
+  requireData: number[];
+  questionData: number[];
+}
+
 export type DashboardData = {
   chartData: ChartDataItem[];
   progressData: ProgressDataItem[];
   latestNewsData: LatestNewsDataItem[];
+  barChartData: BarChartDataItem[];
 }
 
 export const getDashboardData = () => {

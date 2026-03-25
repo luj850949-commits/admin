@@ -42,7 +42,18 @@ export default [
             date: date,
             requiredNumber: Math.floor(Math.random() * 5000) + 10000,
             resolveNumber: Math.floor(Math.random() * 5000) + 10000
-          }))
+          })),
+          // 新增：柱状图数据 (索引0代表上周，索引1代表本周)
+          barChartData: [
+            {
+              requireData: [2101, 5288, 4239, 4962, 6752, 5208, 7450],
+              questionData: [2216, 1148, 1255, 1788, 4821, 1973, 4379]
+            },
+            {
+              requireData: [2101, 3280, 4400, 4962, 5752, 6889, 7600],
+              questionData: [2116, 3148, 3255, 3788, 4821, 4970, 5390]
+            }
+          ]
         },
         message: "获取看板数据成功"
       };
