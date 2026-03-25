@@ -26,11 +26,21 @@ export interface BarChartDataItem {
   questionData: number[];
 }
 
+export interface TableDataItem {
+  id: number;
+  date: string;
+  questionNumber: number;
+  requiredNumber: number;
+  resolveNumber: number;
+  satisfaction: number;
+}
+
 export type DashboardData = {
   chartData: ChartDataItem[];
   progressData: ProgressDataItem[];
   latestNewsData: LatestNewsDataItem[];
   barChartData: BarChartDataItem[];
+  tableData: TableDataItem[];
 }
 
 export const getDashboardData = () => {

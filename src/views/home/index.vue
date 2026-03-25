@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { getDashboardData, type ChartDataItem, type ProgressDataItem, type LatestNewsDataItem, type BarChartDataItem } from "@/api/dashboard";
+import { getDashboardData, type ChartDataItem, type ProgressDataItem, type LatestNewsDataItem, type BarChartDataItem, type TableDataItem } from "@/api/dashboard";
 import { User, ChatDotRound, Select, Star } from "@element-plus/icons-vue";
 
 import ChartBar from "./components/charts/ChartBar.vue";
 import ChartLine from "./components/charts/ChartLine.vue";
 import ChartRound from "./components/charts/ChartRound.vue";
+import WelcomeTable from "./components/table/WelcomeTable.vue";
 
 defineOptions({
   name: "Home"
@@ -20,6 +21,7 @@ const barChartData = ref<BarChartDataItem[]>([
   { requireData: [], questionData: [] },
   { requireData: [], questionData: [] } // 给个默认空骨架防止初次渲染报错
 ]);
+const tableData = ref<TableDataItem[]>([]); // 用于接收表格数据
 
 const cardIcons = [User, ChatDotRound, Select, Star];
 
@@ -27,10 +29,12 @@ const cardIcons = [User, ChatDotRound, Select, Star];
 const fetchData = async () => {
   try {
     const res = await getDashboardData();
+    console.log("看板数据:", res);
     chartData.value = res.chartData;
     progressData.value = res.progressData;
     latestNewsData.value = res.latestNewsData;
     barChartData.value = res.barChartData;
+    tableData.value = res.tableData;
   } catch (error) {
     console.error("获取看板数据失败:", error);
   }
@@ -110,7 +114,7 @@ onMounted(() => {
         :xs="24" :lg="6" class="mb-4"
         v-motion :initial="{ opacity: 0, y: 100 }" :enter="{ opacity: 1, y: 0, transition: { delay: 480 } }"
       >
-        <el-card shadow="never">
+        <el-card shadow="never" class="h-full">
           <div class="flex justify-between mb-4">
             <span class="text-md font-medium">解决概率</span>
           </div>
@@ -130,6 +134,18 @@ onMounted(() => {
             />
             <span class="week-text">{{ item.week }}</span>
           </div>
+        </el-card>
+      </el-col>
+
+      <el-col 
+        :xs="24" :lg="18" class="mb-4"
+        v-motion :initial="{ opacity: 0, y: 100 }" :enter="{ opacity: 1, y: 0, transition: { delay: 560 } }"
+      >
+        <el-card shadow="never" class="h-full">
+          <div class="flex justify-between mb-4">
+            <span class="text-md font-medium">数据统计</span>
+          </div>
+          <WelcomeTable :data="tableData" />
         </el-card>
       </el-col>
 

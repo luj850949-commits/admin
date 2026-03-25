@@ -65,7 +65,22 @@ export default [
               requireData: [2101, 3280, 4400, 4962, 5752, 6889, 7600],
               questionData: [2116, 3148, 3255, 3788, 4821, 4970, 5390]
             }
-          ]
+          ],
+          // 表格统计数据（生成近 30 天的数据）
+          tableData: Array.from({ length: 30 }).map((_, index) => {
+            const d = new Date();
+            d.setDate(d.getDate() - index);
+            const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+            return {
+              id: index + 1,
+              date: dateStr,
+              requiredNumber: Math.floor(Math.random() * 5000) + 13500,
+              questionNumber: Math.floor(Math.random() * 4000) + 12600,
+              resolveNumber: Math.floor(Math.random() * 4000) + 13500,
+              // 模拟 95% ~ 100% 的满意度
+              satisfaction: Math.floor(Math.random() * 6) + 95 
+            };
+          })
         },
         message: "获取看板数据成功"
       };
