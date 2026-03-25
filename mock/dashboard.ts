@@ -22,10 +22,22 @@ export default [
         data: {
           // 1. 顶部卡片数据
           chartData: [
-            { name: "需求人数", value: 36000, percent: "+88%", bgColor: "#effaff", color: "#41b6ff" },
-            { name: "提问数量", value: 16580, percent: "+70%", bgColor: "#fff5f4", color: "#e85f33" },
-            { name: "解决数量", value: 16499, percent: "+99%", bgColor: "#eff8f4", color: "#26ce83" },
-            { name: "用户满意度", value: 100, percent: "+100%", bgColor: "#f6f4fe", color: "#7846e5" }
+            { 
+              name: "需求人数", value: 36000, percent: "+88%", bgColor: "#effaff", color: "#41b6ff",
+              data: [2101, 5288, 4239, 4962, 6752, 5208, 7450] // 折线图数据
+            },
+            { 
+              name: "提问数量", value: 16580, percent: "+70%", bgColor: "#fff5f4", color: "#e85f33",
+              data: [2216, 1148, 1255, 788, 4821, 1973, 4379] 
+            },
+            { 
+              name: "解决数量", value: 16499, percent: "+99%", bgColor: "#eff8f4", color: "#26ce83",
+              data: [861, 1002, 3195, 1715, 3666, 2415, 3645] 
+            },
+            { 
+              name: "用户满意度", value: 100, percent: "+100%", bgColor: "#f6f4fe", color: "#7846e5",
+              data: [100] // 只有一个数据，用来触发渲染环形图
+            }
           ],
           // 2. 进度条数据
           progressData: [

@@ -6,6 +6,7 @@ export interface ChartDataItem {
   percent: string;
   bgColor: string;
   color: string;
+  data: number[];
 }
 
 export interface ProgressDataItem {

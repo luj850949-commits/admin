@@ -1,14 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { getDashboardData, type ChartDataItem, type ProgressDataItem, type LatestNewsDataItem, type BarChartDataItem } from "@/api/dashboard";
+import { User, ChatDotRound, Select, Star } from "@element-plus/icons-vue";
 
 import ChartBar from "./components/charts/ChartBar.vue";
+import ChartLine from "./components/charts/ChartLine.vue";
+import ChartRound from "./components/charts/ChartRound.vue";
 
 defineOptions({
   name: "Home"
 });
 
-const curWeek = ref(1); 
+const curWeek = ref(1);
 
 const chartData = ref<ChartDataItem[]>([]);
 const progressData = ref<ProgressDataItem[]>([]);
@@ -17,6 +20,8 @@ const barChartData = ref<BarChartDataItem[]>([
   { requireData: [], questionData: [] },
   { requireData: [], questionData: [] } // 给个默认空骨架防止初次渲染报错
 ]);
+
+const cardIcons = [User, ChatDotRound, Select, Star];
 
 // 获取数据
 const fetchData = async () => {
@@ -53,10 +58,28 @@ onMounted(() => {
         <el-card shadow="never">
           <div class="flex justify-between">
             <span class="text-md font-medium">{{ item.name }}</span>
+            <div 
+              style="width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center;"
+              :style="{ backgroundColor: 'var(--bg-color)', color: item.color }"
+            >
+              <el-icon :size="18" :color="item.color">
+                <component :is="cardIcons[index]" />
+              </el-icon>
+            </div>
           </div>
-          <div class="mt-3">
-            <span style="font-size: 1.6em; font-weight: bold;">{{ item.value }}</span>
-            <p style="color: #67c23a; font-weight: 500;">{{ item.percent }}</p>
+          <div class="flex justify-between items-start mt-3">
+            <div class="mt-3">
+              <span style="font-size: 1.6em; font-weight: bold;">{{ item.value }}</span>
+              <p style="color: #67c23a; font-weight: 500;">{{ item.percent }}</p>
+            </div>
+            <div style="width: 50%;">
+              <ChartLine
+                v-if="item.data && item.data.length > 1"
+                :color="item.color"
+                :data="item.data"
+              />
+              <ChartRound v-else />
+            </div>
           </div>
         </el-card>
       </el-col>
