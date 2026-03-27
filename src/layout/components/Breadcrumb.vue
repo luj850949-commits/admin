@@ -23,8 +23,11 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n()
 
 interface BreadcrumbItem {
   path: string;
@@ -42,7 +45,7 @@ const getBreadcrumb = (): void => {
   matched.forEach(item => {
     result.push({
       path: item.path,
-      title: String(item.meta.title || item.name || ''),
+      title: String(t(`layout.${item.meta.title}`) || item.name || ''),
       redirect: typeof item.redirect === 'string' ? item.redirect : undefined
     })
   })

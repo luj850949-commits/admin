@@ -15,10 +15,10 @@ export const constantRoutes = [
     redirect: "/home",
     children: [
       {
-        path: "home",
+        path: "/home",
         name: "Home",
         component: () => import("@/views/home/index.vue"),
-        meta: { title: localStorage.getItem('locale') === 'zh' ? '首页' : 'Home' }
+        meta: { title: 'frontPage' }
       }
       // 其他业务页面暂且移除，等下使用动态挂载方式加进来
     ]
@@ -32,34 +32,34 @@ export const constantRoutes = [
 
 export const asyncRoutes = [
   {
-    path: 'chat',
+    path: '/chat',
     name: 'Chat',
     component: () => import('@/views/chat/index.vue'),
     meta: { 
-      title: localStorage.getItem('locale') === 'zh' ? 'AI 助手' : 'AI Assistant',
+      title: 'chat',
       roles: ['admin', 'common']
     }
   },
   {
-    path: 'profile',
+    path: '/profile',
     name: 'Profile',
     component: () => import('@/views/profile/index.vue'),
     meta: { 
-      title: localStorage.getItem('locale') === 'zh' ? '个人中心' : 'Profile',
+      title: 'profile',
       roles: ['admin']
     },
   },
   {
-    path: 'error',
+    path: '/error',
     name: 'Error',
     redirect: "/error/403",
     meta: { 
-      title: localStorage.getItem('locale') === 'zh' ? '异常页面' : 'Error Pages',
+      title: 'errorPages',
       roles: ['admin', 'common']
     },
     children: [
       {
-        path: '403',
+        path: '/error/403',
         name: 'Error403',
         component: () => import('@/views/error/403.vue'),
         meta: { 
@@ -68,7 +68,7 @@ export const asyncRoutes = [
         }
       },
       {
-        path: '404',
+        path: '/error/404',
         name: 'Error404',
         component: () => import('@/views/error/404.vue'),
         meta: { 
@@ -77,7 +77,7 @@ export const asyncRoutes = [
         }
       },
       {
-        path: '500',
+        path: '/error/500',
         name: 'Error500',
         component: () => import('@/views/error/500.vue'),
         meta: { 
@@ -88,29 +88,29 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: 'result',
+    path: '/result',
     name: 'Result',
     redirect: "/result/success",
     meta: { 
-      title: localStorage.getItem('locale') === 'zh' ? '结果页面' : 'Result Pages',
+      title: 'resultPages',
       roles: ['admin', 'common']
     },
     children: [
       {
-        path: 'success',
+        path: '/result/success',
         name: 'Success',
         component: () => import('@/views/result/success.vue'),
         meta: { 
-          title: localStorage.getItem('locale') === 'zh' ? '成功页面' : 'Success',
+          title: 'success',
           roles: ['admin', 'common']
         }
       },
       {
-        path: 'fail',
+        path: '/result/fail',
         name: 'Fail',
         component: () => import('@/views/result/fail.vue'),
         meta: { 
-          title: localStorage.getItem('locale') === 'zh' ? '失败页面' : 'Fail',
+          title: 'fail',
           roles: ['admin', 'common']
         }
       }
@@ -145,7 +145,7 @@ router.beforeEach((to, from) => {
         accessedRoutes.forEach(route => {
           router.addRoute('Layout', route)
         })
-        return { ...to, replace: true } // 这样做的目的是为了确保 addRoute 完成后，再进行一次导航，避免出现路由未找到的情况
+        return { path: to.fullPath, replace: true } // 这样做的目的是为了确保 addRoute 完成后，再进行一次导航，避免出现路由未找到的情况
       }
     }
   } else {

@@ -9,11 +9,11 @@ export const usePermissionStore = defineStore('permission', () => {
   const setWholeMenus = (routes: RouteRecordRaw[]) => {
     // 首页
     const baseMenu = [{
-      path: '/',
+      path: '/home',
       name: 'Home',
       component: () => import("@/views/home/index.vue"),
       meta: {
-        title: localStorage.getItem('locale') === 'zh' ? '首页' : 'Home',
+        title: 'frontPage',
       }
     }] as RouteRecordRaw[]
 

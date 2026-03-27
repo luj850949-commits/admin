@@ -3,15 +3,12 @@
     class="h-full bg-white dark:bg-[#141414] flex flex-col shrink-0 transition-all duration-300 z-20 border-r border-gray-100 dark:border-gray-800 overflow-hidden"
     :class="isCollapse ? 'w-[64px]' : 'w-[210px]'"
   >
-    
     <div class="h-[60px] shrink-0 flex items-center justify-center font-bold text-gray-800 dark:text-white tracking-widest border-b border-gray-100 dark:border-gray-800 whitespace-nowrap overflow-hidden">
       <transition name="logo-fade">
         <span v-if="!isCollapse" class="text-xl">My Admin</span>
         <span v-else class="text-xl">Ad</span>
       </transition>
     </div>
-    <!-- :default-active="$route.path" -->
-     <!-- default-active="/dashboard" -->
     <el-scrollbar class="flex-1">
       <el-menu
         class="border-none w-full pure-menu-vertical"
@@ -20,48 +17,38 @@
         :collapse-transition="false"
         router
       >
-        <el-menu-item index="/home">
-          <el-icon><DataBoard /></el-icon>
-          <template #title><span>{{ t('layout.frontPage') }}</span></template>
-        </el-menu-item>
-        
-        <el-menu-item index="/chat">
-          <el-icon><ChatDotRound /></el-icon>
-          <template #title><span>{{ t('layout.chat') }}</span></template>
-        </el-menu-item>
+      <template v-for="route in permissionStore.wholeMenus" :key="route.path">
 
-        <el-sub-menu index="error">
+        <el-sub-menu v-if="route.children && route.children.length > 0" :index="route.path">
           <template #title>
-            <el-icon><Warning /></el-icon>
-            <span>{{ t('layout.errorPages') }}</span>
+            <!-- <el-icon><component :is="route.meta?.icon" />
+              <component :is="route.meta?.icon" />
+            </el-icon> -->
+            <span>{{ t(`layout.${route.meta?.title}`) }}</span>
           </template>
-          <el-menu-item index="/error/403">403</el-menu-item>
-          <el-menu-item index="/error/404">404</el-menu-item>
-          <el-menu-item index="/error/500">500</el-menu-item>
+          <el-menu-item v-for="child in route.children" :key="child.path" :index="child.path">
+            {{ t(`layout.${child.meta?.title}`) }}
+          </el-menu-item>
         </el-sub-menu>
 
-        <el-sub-menu index="result">
-          <template #title>
-            <el-icon><CircleCheck /></el-icon>
-            <span>{{ t('layout.resultPages') }}</span>
-          </template>
-          <el-menu-item index="/result/success">{{ t('layout.success') }}</el-menu-item>
-          <el-menu-item index="/result/fail">{{ t('layout.fail') }}</el-menu-item>
-        </el-sub-menu>
-        
-        <el-menu-item index="/profile">
-          <el-icon><User /></el-icon>
-          <template #title><span>{{ t('layout.profile') }}</span></template>
+        <el-menu-item v-else :index="route.path">
+          <!-- <el-icon><component :is="route.meta?.icon" />
+          
+          </el-icon> -->
+          <template #title><span>{{ t(`layout.${route.meta?.title}`) }}</span></template>
         </el-menu-item>
+      </template>
       </el-menu>
     </el-scrollbar>
   </div>
 </template>
 
 <script setup lang="ts">
-import { DataBoard, ChatDotRound, User, Warning, CircleCheck } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n';
+import { usePermissionStore } from '@/stores';
+
 const { t } = useI18n()
+const permissionStore = usePermissionStore()
 
 interface SidebarProps {
   isCollapse: boolean;
