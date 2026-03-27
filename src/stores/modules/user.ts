@@ -5,6 +5,7 @@ import { ref } from 'vue'
 export const useUserStore = defineStore('user', () => {
   const token = ref('')
   const username = ref('')
+  const roles = ref<string[]>([])
 
   // 修改 token
   const setToken = (newToken: string) => {
@@ -14,16 +15,23 @@ export const useUserStore = defineStore('user', () => {
   const setUsername = (newName: string) => {
     username.value = newName
   }
+  // 修改 roles
+  const setRoles = (newRoles: string[]) => {
+    roles.value = newRoles
+  }
   // 清空个人信息
   const clearUserInfo = () => {
     token.value = ''
     username.value = ''
+    roles.value = []
   }
   return {
     token,
     username,
+    roles,
     setToken,
     setUsername,
+    setRoles,
     clearUserInfo
   }
 }, {

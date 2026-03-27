@@ -29,7 +29,6 @@ const cardIcons = [User, ChatDotRound, Select, Star];
 const fetchData = async () => {
   try {
     const res = await getDashboardData();
-    console.log("看板数据:", res);
     chartData.value = res.chartData;
     progressData.value = res.progressData;
     latestNewsData.value = res.latestNewsData;

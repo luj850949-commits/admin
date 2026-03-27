@@ -53,6 +53,7 @@ const onLogin = async () => {
         ElMessage.success(t('login.submitSuc'));
         userStore.setToken(res.token)
         userStore.setUsername(res.username)
+        userStore.setRoles(res.roles)
         setTimeout(() => {
           loading.value = false;
           router.push('/')
