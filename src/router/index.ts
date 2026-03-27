@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useUserStore } from '@/stores';
+import { useUserStore, usePermissionStore } from '@/stores';
+import { filterAsyncRoutes } from './utils/filterAsyncRoutes'
 
 export const constantRoutes = [
   {
@@ -122,17 +123,30 @@ const router = createRouter({
   routes: constantRoutes
 })
 
-const whiteList = ['/lohin'];
+const whiteList = ['/login'];
 
 // 全局路由守卫
 router.beforeEach((to, from) => {
   const userStore = useUserStore()
+  const permissionStore = usePermissionStore()
+
   if (userStore.token) {
     if (to.path === '/login') {
       // 如果他已经登录了，还访问login，则直接踢回首页
       return '/'
     } else {
-      // 将在这里进行拦截，根据 roles 过滤 asyncRoutes 并动态注入
+      // 如果用户已经有 token 了，但 permission store 中没有菜单树，说明这是第一次访问需要动态路由的页面
+      if (permissionStore.wholeMenus.length === 0) {
+        // 过滤出该用户能访问的路由树
+        const accessedRoutes = filterAsyncRoutes(asyncRoutes, userStore.roles)
+        // 将路由保存在 permission store 供侧边栏渲染
+        permissionStore.setWholeMenus(accessedRoutes)
+        // 将动态路由作为子路由，挂载到主框架 Layout 之下
+        accessedRoutes.forEach(route => {
+          router.addRoute('Layout', route)
+        })
+        return { ...to, replace: true } // 这样做的目的是为了确保 addRoute 完成后，再进行一次导航，避免出现路由未找到的情况
+      }
     }
   } else {
     if (!whiteList.includes(to.path)) {

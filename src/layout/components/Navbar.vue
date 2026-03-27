@@ -49,7 +49,7 @@
 <script setup lang="ts">
 import { Fold, Setting } from '@element-plus/icons-vue'
 import Breadcrumb from './Breadcrumb.vue'
-import { useUserStore } from '@/stores'
+import { useUserStore, usePermissionStore } from '@/stores'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
@@ -57,6 +57,7 @@ const { t } = useI18n()
 import translate from '@/components/translate.vue'
 
 const userStore = useUserStore()
+const permissionStore = usePermissionStore()
 const router = useRouter()
 
 interface NavbarProps {
@@ -83,6 +84,7 @@ const openSettings = (): void => {
 
 const handleLogout = (): void => {
   userStore.clearUserInfo()
+  permissionStore.clearMenus()
   router.push('/login')
 }
 

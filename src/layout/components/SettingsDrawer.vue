@@ -29,7 +29,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { SwitchButton } from '@element-plus/icons-vue'
-import { useUserStore } from '@/stores'
+import { useUserStore, usePermissionStore } from '@/stores'
 import { useI18n } from 'vue-i18n'
 
 import changeTheme from "@/components/changeTheme.vue";
@@ -38,6 +38,7 @@ const { t } = useI18n()
 
 const router = useRouter()
 const userStore = useUserStore()
+const permissionStore = usePermissionStore()
 
 const drawerVisible = ref<boolean>(false)
 
@@ -50,6 +51,7 @@ defineExpose({ openDrawer })
 
 const handleLogout = (): void => {
   userStore.clearUserInfo()
+  permissionStore.clearMenus()
   router.push('/login')
 }
 </script>
