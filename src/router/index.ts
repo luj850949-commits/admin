@@ -181,6 +181,15 @@ export const asyncRoutes = [
           title: 'menuManagement',
           icon: 'Menu'
         }
+      },
+      {
+        path: '/system/dept',
+        name: 'SystemDept',
+        component: () => import('@/views/system/dept/index.vue'),
+        meta: {
+          title: 'deptMangerment',
+          icon: 'OfficeBuilding'
+        }
       }
     ]
   },
@@ -193,7 +202,7 @@ export const asyncRoutes = [
       roles: ['admin', 'common'],
       icon: 'User'
     },
-  }
+  },
 ]
 
 const router = createRouter({

@@ -51,6 +51,7 @@ export default {
     userMangerment: '用户管理',
     roleMangerment: '角色管理',
     menuManagement: '菜单管理',
+    deptMangerment: '部门管理',
     systemConfiguration: '系统配置',
     themeMode: '主题模式',
     darkMode: '暗黑模式',

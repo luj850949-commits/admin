@@ -48,6 +48,7 @@ export default {
     userMangerment: 'User Management',
     roleMangerment: 'Role Management',
     menuManagement: 'Menu Management',
+    deptMangerment: 'Department',
     logout: 'Logout',
     systemConfiguration: 'System Configuration',
     themeMode: 'Theme Mode',
