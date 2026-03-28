@@ -27,7 +27,10 @@
             <span>{{ t(`layout.${route.meta?.title}`) }}</span>
           </template>
           <el-menu-item v-for="child in route.children" :key="child.path" :index="child.path">
-            {{ t(`layout.${child.meta?.title}`) }}
+            <el-icon>
+              <component :is="Icons[child.meta?.icon as keyof typeof Icons]" />
+            </el-icon>
+            <span>{{ t(`layout.${child.meta?.title}`) }}</span>            
           </el-menu-item>
         </el-sub-menu>
 

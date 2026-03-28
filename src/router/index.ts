@@ -148,12 +148,23 @@ export const asyncRoutes = [
   {
     path: '/system',
     name: 'System',
-    component: () => import('@/views/system/index.vue'),
+    redirect: '/system/user', // 默认重定向到用户管理
     meta: { 
       title: 'systemManagement',
       roles: ['admin'], // <--- 只有 admin 角色才会挂载这个路由
       icon: 'Lock'
-    } 
+    },
+    children: [
+      {
+        path: '/system/user',
+        name: 'SystemUser',
+        component: () => import('@/views/system/user/index.vue'),
+        meta: {
+          title: 'userMangerment',
+          icon: 'User'
+        }
+      }
+    ]
   },
   {
     path: '/profile',

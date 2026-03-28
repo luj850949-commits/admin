@@ -45,6 +45,7 @@ export default {
     pagePermission: 'Page Permission',
     buttonPermission: 'Button Permission',
     systemManagement: 'System Management',
+    userMangerment: 'User Management',
     logout: 'Logout',
     systemConfiguration: 'System Configuration',
     themeMode: 'Theme Mode',
