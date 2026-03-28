@@ -46,6 +46,7 @@ export default {
     buttonPermission: 'Button Permission',
     systemManagement: 'System Management',
     userMangerment: 'User Management',
+    roleMangerment: 'Role Management',
     logout: 'Logout',
     systemConfiguration: 'System Configuration',
     themeMode: 'Theme Mode',

@@ -163,6 +163,15 @@ export const asyncRoutes = [
           title: 'userMangerment',
           icon: 'User'
         }
+      },
+      {
+        path: '/system/role',
+        name: 'SystemRole',
+        component: () => import('@/views/system/role/index.vue'),
+        meta: {
+          title: 'roleMangerment',
+          icon: 'UserFilled'
+        }
       }
     ]
   },
