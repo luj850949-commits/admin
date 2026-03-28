@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { MotionPlugin } from '@vueuse/motion'
+import { auth } from './directives/auth'
 
 import App from './App.vue'
 import router from './router'
@@ -19,5 +20,7 @@ app.use(pinia)
 app.use(router)
 app.use(i18n)
 app.use(MotionPlugin)
+
+app.directive('auth', auth)
 
 app.mount('#app')

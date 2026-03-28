@@ -46,6 +46,7 @@ export default {
     500: '500',
     permission: '权限管理',
     pagePermission: '页面权限',
+    buttonPermission: '按钮权限',
     systemManagement: '系统管理',
     systemConfiguration: '系统配置',
     themeMode: '主题模式',

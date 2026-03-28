@@ -43,6 +43,7 @@ export default {
     500: '500',
     permission: 'Permission',
     pagePermission: 'Page Permission',
+    buttonPermission: 'Button Permission',
     systemManagement: 'System Management',
     logout: 'Logout',
     systemConfiguration: 'System Configuration',

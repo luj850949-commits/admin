@@ -1,3 +1,4 @@
+import type { set } from '@vueuse/core'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -6,6 +7,8 @@ export const useUserStore = defineStore('user', () => {
   const token = ref('')
   const username = ref('')
   const roles = ref<string[]>([])
+  // 存储按钮级别的权限标识
+  const permissions = ref<string[]>([])
 
   // 修改 token
   const setToken = (newToken: string) => {
@@ -19,19 +22,26 @@ export const useUserStore = defineStore('user', () => {
   const setRoles = (newRoles: string[]) => {
     roles.value = newRoles
   }
+  // 设置按钮权限的方法
+  const setPermissions = (newPerms: string[]) => {
+    permissions.value = newPerms
+  }
   // 清空个人信息
   const clearUserInfo = () => {
     token.value = ''
     username.value = ''
     roles.value = []
+    permissions.value = []
   }
   return {
     token,
     username,
     roles,
+    permissions,
     setToken,
     setUsername,
     setRoles,
+    setPermissions,
     clearUserInfo
   }
 }, {
