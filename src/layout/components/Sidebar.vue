@@ -21,9 +21,9 @@
 
         <el-sub-menu v-if="route.children && route.children.length > 0" :index="route.path">
           <template #title>
-            <!-- <el-icon><component :is="route.meta?.icon" />
-              <component :is="route.meta?.icon" />
-            </el-icon> -->
+            <el-icon>
+              <component :is="Icons[route.meta?.icon as keyof typeof Icons]" />
+            </el-icon>
             <span>{{ t(`layout.${route.meta?.title}`) }}</span>
           </template>
           <el-menu-item v-for="child in route.children" :key="child.path" :index="child.path">
@@ -32,9 +32,9 @@
         </el-sub-menu>
 
         <el-menu-item v-else :index="route.path">
-          <!-- <el-icon><component :is="route.meta?.icon" />
-          
-          </el-icon> -->
+          <el-icon>
+            <component :is="Icons[route.meta?.icon as keyof typeof Icons]" />
+          </el-icon>
           <template #title><span>{{ t(`layout.${route.meta?.title}`) }}</span></template>
         </el-menu-item>
       </template>
@@ -46,6 +46,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { usePermissionStore } from '@/stores';
+import * as Icons from '@element-plus/icons-vue';
 
 const { t } = useI18n()
 const permissionStore = usePermissionStore()

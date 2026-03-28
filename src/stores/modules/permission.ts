@@ -14,6 +14,7 @@ export const usePermissionStore = defineStore('permission', () => {
       component: () => import("@/views/home/index.vue"),
       meta: {
         title: 'frontPage',
+        icon: 'House',
       }
     }] as RouteRecordRaw[]
 

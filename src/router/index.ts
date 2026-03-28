@@ -18,7 +18,10 @@ export const constantRoutes = [
         path: "/home",
         name: "Home",
         component: () => import("@/views/home/index.vue"),
-        meta: { title: 'frontPage' }
+        meta: {
+          title: 'frontPage',
+          icon: 'House',
+        }
       }
       // 其他业务页面暂且移除，等下使用动态挂载方式加进来
     ]
@@ -37,17 +40,9 @@ export const asyncRoutes = [
     component: () => import('@/views/chat/index.vue'),
     meta: { 
       title: 'chat',
-      roles: ['admin', 'common']
+      roles: ['admin', 'common'],
+      icon: 'ChatDotRound'
     }
-  },
-  {
-    path: '/profile',
-    name: 'Profile',
-    component: () => import('@/views/profile/index.vue'),
-    meta: { 
-      title: 'profile',
-      roles: ['admin']
-    },
   },
   {
     path: '/error',
@@ -55,7 +50,8 @@ export const asyncRoutes = [
     redirect: "/error/403",
     meta: { 
       title: 'errorPages',
-      roles: ['admin', 'common']
+      roles: ['admin', 'common'],
+      icon: 'Warning'
     },
     children: [
       {
@@ -93,7 +89,8 @@ export const asyncRoutes = [
     redirect: "/result/success",
     meta: { 
       title: 'resultPages',
-      roles: ['admin', 'common']
+      roles: ['admin', 'common'],
+      icon: 'CircleCheck'
     },
     children: [
       {
@@ -115,6 +112,49 @@ export const asyncRoutes = [
         }
       }
     ]
+  },
+  {
+    path: '/permission',
+    name: 'Permission',
+    redirect: '/permission/page',
+    meta: { 
+      title: 'permission', 
+      roles: ['admin', 'common'],
+      icon: 'Key'
+    },
+    children: [
+      {
+        path: '/permission/page',
+        name: 'PermissionPage',
+        component: () => import('@/views/permission/page/index.vue'),
+        meta: { 
+          title: 'pagePermission',
+          roles: ['admin', 'common']
+        }
+      }
+    ]
+  },
+  
+  // 系统管理模块,只有 admin 才能访问
+  {
+    path: '/system',
+    name: 'System',
+    component: () => import('@/views/system/index.vue'),
+    meta: { 
+      title: 'systemManagement',
+      roles: ['admin'], // <--- 只有 admin 角色才会挂载这个路由
+      icon: 'Lock'
+    } 
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('@/views/profile/index.vue'),
+    meta: { 
+      title: 'profile',
+      roles: ['admin', 'common'],
+      icon: 'User'
+    },
   }
 ]
 
