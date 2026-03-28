@@ -47,6 +47,7 @@ export default {
     systemManagement: 'System Management',
     userMangerment: 'User Management',
     roleMangerment: 'Role Management',
+    menuManagement: 'Menu Management',
     logout: 'Logout',
     systemConfiguration: 'System Configuration',
     themeMode: 'Theme Mode',

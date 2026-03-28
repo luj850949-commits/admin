@@ -50,6 +50,7 @@ export default {
     systemManagement: '系统管理',
     userMangerment: '用户管理',
     roleMangerment: '角色管理',
+    menuManagement: '菜单管理',
     systemConfiguration: '系统配置',
     themeMode: '主题模式',
     darkMode: '暗黑模式',

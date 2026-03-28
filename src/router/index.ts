@@ -172,6 +172,15 @@ export const asyncRoutes = [
           title: 'roleMangerment',
           icon: 'UserFilled'
         }
+      },
+      {
+        path: '/system/menu',
+        name: 'SystemMenu',
+        component: () => import('@/views/system/menu/index.vue'),
+        meta: {
+          title: 'menuManagement',
+          icon: 'Menu'
+        }
       }
     ]
   },
@@ -204,7 +213,6 @@ router.beforeEach((to, from) => {
       // 如果他已经登录了，还访问login，则直接踢回首页
       return '/'
     } else {
-      console.log(permissionStore.wholeMenus)
       // 如果用户已经有 token 了，但 permission store 中没有菜单树，说明这是第一次访问需要动态路由的页面
       if (permissionStore.wholeMenus.length === 0) {
         // 过滤出该用户能访问的路由树
